@@ -89,13 +89,13 @@ export default function Home() {
           className="space-y-3 pt-2 pb-8"
         >
           <Link
-            href="/login"
+            href="/siddur"
             className="block w-full py-4 rounded-2xl bg-[#1B4965] text-white text-center font-bold text-lg hover:bg-[#163d55] transition-colors shadow-lg shadow-[#1B4965]/20"
           >
             Get Started
           </Link>
           <p className="text-center text-xs text-gray-400">
-            Free to use. Sign in to save your progress.
+            Free to use. No sign-in required.
           </p>
         </motion.div>
       </div>
