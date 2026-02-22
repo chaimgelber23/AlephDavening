@@ -132,10 +132,7 @@ export function AmudMode({
             <button onClick={onBack} className="text-[#5FA8D3] text-sm hover:text-white">
               ← Exit Amud
             </button>
-            <div className="flex items-center gap-2">
-              <span className="text-lg">🎤</span>
-              <span className="text-sm font-semibold">Amud Mode</span>
-            </div>
+            <span className="text-sm font-semibold">Amud Mode</span>
             <button
               onClick={() => setShowTips(!showTips)}
               className="text-xs text-[#5FA8D3] hover:text-white"
@@ -372,7 +369,7 @@ export function AmudMode({
                       )}
                       {currentItem.amud.waitForCongregation && (
                         <p className="text-xs text-[#4A7C59] mt-2 text-center font-medium">
-                          ⏸ Wait for congregation to finish
+                          Wait for congregation to finish
                         </p>
                       )}
                     </div>

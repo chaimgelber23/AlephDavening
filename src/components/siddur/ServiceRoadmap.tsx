@@ -6,11 +6,11 @@ import { useUserStore } from '@/stores/userStore';
 import { AmudBadge } from './AmudBadge';
 import type { DaveningService, ServiceSegment, ServiceItem } from '@/types';
 
-const ROLE_ICONS: Record<string, string> = {
-  shaliach_tzibbur: '🎤',
-  congregation: '👥',
-  both: '🤝',
-  silent_individual: '🤫',
+const ROLE_DOTS: Record<string, string> = {
+  shaliach_tzibbur: '#1B4965',
+  congregation: '#4A7C59',
+  both: '#7C3AED',
+  silent_individual: '#9CA3AF',
 };
 
 const TYPE_LABELS: Record<string, string> = {
@@ -110,7 +110,7 @@ export function ServiceRoadmap({
             onClick={onEnterAmudMode}
             className="mt-4 w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2"
           >
-            🎤 Enter Amud Mode
+            Enter Amud Mode
           </button>
         </div>
       </div>
@@ -250,9 +250,10 @@ function SegmentCard({
 
                       {/* Role icon */}
                       {showAmudCues && (
-                        <span className="text-xs shrink-0">
-                          {ROLE_ICONS[item.amud.role]}
-                        </span>
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: ROLE_DOTS[item.amud.role] || '#9CA3AF' }}
+                        />
                       )}
 
                       {/* Label */}

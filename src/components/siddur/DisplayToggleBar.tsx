@@ -7,7 +7,7 @@ const TOGGLES: { key: keyof DisplaySettings; label: string; icon: string }[] = [
   { key: 'showTransliteration', label: 'Transliteration', icon: 'Aa' },
   { key: 'showTranslation', label: 'Translation', icon: 'En' },
   { key: 'showInstructions', label: 'Instructions', icon: '?' },
-  { key: 'showAmudCues', label: 'Amud', icon: '🎤' },
+  { key: 'showAmudCues', label: 'Amud', icon: 'ST' },
 ];
 
 export function DisplayToggleBar() {

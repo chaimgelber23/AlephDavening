@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { useUserStore } from '@/stores/userStore';
 import type { DaveningService } from '@/types';
 
-const TIME_ICONS: Record<string, string> = {
-  shacharit: '🌅',
-  mincha: '☀️',
-  maariv: '🌙',
-  musaf: '📜',
-  kabbalat_shabbat: '🕯️',
+const TIME_COLORS: Record<string, string> = {
+  shacharit: '#C6973F',
+  mincha: '#5FA8D3',
+  maariv: '#1B4965',
+  musaf: '#4A7C59',
+  kabbalat_shabbat: '#7C3AED',
 };
 
 export function ServiceCard({
@@ -43,9 +43,15 @@ export function ServiceCard({
       className="w-full bg-white rounded-2xl border border-gray-100 hover:shadow-md hover:border-[#5FA8D3]/30 p-5 text-left transition-all"
     >
       <div className="flex items-start gap-4">
-        {/* Icon */}
-        <div className="w-12 h-12 rounded-xl bg-[#1B4965]/8 flex items-center justify-center text-xl shrink-0">
-          {TIME_ICONS[service.timeOfDay] || '📖'}
+        {/* Color accent */}
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+          style={{ backgroundColor: (TIME_COLORS[service.timeOfDay] || '#1B4965') + '15' }}
+        >
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: TIME_COLORS[service.timeOfDay] || '#1B4965' }}
+          />
         </div>
 
         <div className="flex-1 min-w-0">
