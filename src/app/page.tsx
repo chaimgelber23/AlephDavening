@@ -62,7 +62,7 @@ export default function Home() {
           {[
             { title: 'Follow Along in Shul', desc: 'See every tefilah laid out clearly — Shacharit, Mincha, Maariv, and Shabbat. Always know where you are.', color: '#1B4965' },
             { title: 'Lead from the Amud', desc: 'Know what to say aloud, when to wait, and what the tzibbur responds. Be ready to daven for the amud.', color: '#4A7C59' },
-            { title: 'Hear Every Word', desc: 'Listen to each tefilah with audio playback and word-by-word highlighting. Learn the pronunciation and flow.', color: '#C6973F' },
+            { title: 'Learn Every Word', desc: 'Listen to each tefilah with audio playback and word-by-word highlighting. Learn the pronunciation and flow.', color: '#C6973F' },
             { title: 'Learn at Your Pace', desc: 'Show or hide transliteration, translation, and instructions as you gain confidence.', color: '#5FA8D3' },
           ].map((feature, i) => (
             <motion.div
