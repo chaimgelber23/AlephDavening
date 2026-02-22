@@ -60,10 +60,10 @@ export default function Home() {
           className="space-y-3"
         >
           {[
-            { icon: '\u{1F4D6}', title: 'Full Davening Map', desc: 'Follow along with every service — Shacharit, Mincha, Maariv, and Shabbat' },
-            { icon: '\u{1F3A4}', title: 'Amud Mode', desc: 'Learn to lead davening — know what to say aloud, when to wait, and what the congregation responds' },
-            { icon: '\u{1F3B5}', title: 'Karaoke Audio', desc: 'Word-by-word highlighting synced to audio — learn the melody and pronunciation' },
-            { icon: '\u{2699}\u{FE0F}', title: 'Adaptive Layers', desc: 'Toggle transliteration, translation, and instructions on or off as you improve' },
+            { title: 'Follow Along in Shul', desc: 'See every tefilah laid out clearly — Shacharit, Mincha, Maariv, and Shabbat. Always know where you are.', color: '#1B4965' },
+            { title: 'Lead from the Amud', desc: 'Know what to say aloud, when to wait, and what the tzibbur responds. Be ready to daven for the amud.', color: '#4A7C59' },
+            { title: 'Hear Every Word', desc: 'Listen to each tefilah with audio playback and word-by-word highlighting. Learn the pronunciation and flow.', color: '#C6973F' },
+            { title: 'Learn at Your Pace', desc: 'Show or hide transliteration, translation, and instructions as you gain confidence.', color: '#5FA8D3' },
           ].map((feature, i) => (
             <motion.div
               key={feature.title}
@@ -72,10 +72,10 @@ export default function Home() {
               transition={{ delay: 0.5 + i * 0.1 }}
               className="bg-white rounded-2xl border border-gray-100 p-4 flex items-start gap-4"
             >
-              <span className="text-2xl mt-0.5">{feature.icon}</span>
+              <div className="w-1 self-stretch rounded-full shrink-0" style={{ backgroundColor: feature.color }} />
               <div>
                 <h3 className="font-semibold text-[#2D3142] text-sm">{feature.title}</h3>
-                <p className="text-xs text-gray-500 mt-1">{feature.desc}</p>
+                <p className="text-xs text-gray-500 mt-1 leading-relaxed">{feature.desc}</p>
               </div>
             </motion.div>
           ))}
