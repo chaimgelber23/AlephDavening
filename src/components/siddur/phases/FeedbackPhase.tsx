@@ -55,9 +55,13 @@ export function FeedbackPhase({ prayer, onComplete }: FeedbackPhaseProps) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="text-4xl mb-2"
+          className="mb-2"
         >
-          &#x1F389;
+          <div className="w-12 h-12 rounded-xl bg-[#4A7C59]/15 flex items-center justify-center mx-auto">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" strokeWidth="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
         </motion.div>
         <h2 className="text-xl font-bold text-[#2D3142]">
           You just learned {prayer.nameEnglish}!

@@ -1,4 +1,5 @@
 import { Prayer } from '@/types';
+import { WORD_TIMINGS } from './word-timings';
 
 /**
  * AlephDavening Prayer & Bracha Content
@@ -1427,6 +1428,235 @@ const TEFILLAH_PRAYERS: Prayer[] = [
       },
     ],
   },
+  // ---- Hallel (Psalms 113-118) ----
+  {
+    id: 'hallel',
+    slug: 'hallel',
+    nameHebrew: 'הַלֵּל',
+    nameEnglish: 'Hallel',
+    category: 'tefillah',
+    sortOrder: 22,
+    whenSaid: 'On Yom Tov (holidays), Rosh Chodesh (new month), and Chanukah — after Shacharit Amidah',
+    whySaid: 'Hallel is a collection of psalms of praise and thanksgiving (Psalms 113-118) recited to express gratitude to God for His miracles and deliverance. Full Hallel is said on Sukkot, Shemini Atzeret, Simchat Torah, Shavuot, the first two days of Pesach, and all eight days of Chanukah. Half Hallel (omitting parts of Psalms 115 and 116) is said on Rosh Chodesh and the intermediate and final days of Pesach.',
+    inspirationText: 'The Talmud (Pesachim 118a) teaches that Hallel encompasses past redemption, future redemption, and the daily struggles in between. When we say Hallel, we join a chorus that stretches from the Exodus to the ultimate redemption — declaring that no matter the darkness, God\'s kindness endures forever.',
+    requiredLevel: 4,
+    estimatedReadSeconds: 480,
+    sections: [
+      // Psalm 113
+      {
+        id: 'hallel-1',
+        sortOrder: 1,
+        hebrewText: 'הַלְלוּיָהּ הַלְלוּ עַבְדֵי יְהוָה הַלְלוּ אֶת שֵׁם יְהוָה׃\nיְהִי שֵׁם יְהוָה מְבֹרָךְ מֵעַתָּה וְעַד עוֹלָם׃\nמִמִּזְרַח שֶׁמֶשׁ עַד מְבוֹאוֹ מְהֻלָּל שֵׁם יְהוָה׃',
+        transliteration: 'Hal\'luyah, hal\'lu avdei Adonai, hal\'lu et sheim Adonai.\nY\'hi sheim Adonai m\'vorach mei-atah v\'ad olam.\nMi-mizrach shemesh ad m\'vo-o, m\'hulal sheim Adonai.',
+        translation: 'Halleluyah! Praise, O servants of God, praise the name of God.\nMay the name of God be blessed from now and forever.\nFrom the rising of the sun to its setting, the name of God is praised.',
+        notes: 'הַלְלוּיָהּ = Praise God. עַבְדֵי = servants of. מְבֹרָךְ = blessed. מִמִּזְרַח = from the east/rising.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      {
+        id: 'hallel-2',
+        sortOrder: 2,
+        hebrewText: 'רָם עַל כָּל גּוֹיִם יְהוָה עַל הַשָּׁמַיִם כְּבוֹדוֹ׃\nמִי כַּיהוָה אֱלֹהֵינוּ הַמַּגְבִּיהִי לָשָׁבֶת׃\nהַמַּשְׁפִּילִי לִרְאוֹת בַּשָּׁמַיִם וּבָאָרֶץ׃',
+        transliteration: 'Ram al kol goyim Adonai, al ha-shamayim k\'vodo.\nMi ka-Adonai Eloheinu, ha-magbihi la-shavet.\nHa-mashpili lir\'ot ba-shamayim u-va-aretz.',
+        translation: 'God is high above all nations; His glory is above the heavens.\nWho is like the Lord our God, Who dwells on high,\nyet looks down low upon the heavens and the earth?',
+        notes: 'רָם = exalted/high. כְּבוֹדוֹ = His glory. הַמַּגְבִּיהִי = Who raises Himself on high. הַמַּשְׁפִּילִי = Who lowers Himself to look.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      {
+        id: 'hallel-3',
+        sortOrder: 3,
+        hebrewText: 'מְקִימִי מֵעָפָר דָּל מֵאַשְׁפֹּת יָרִים אֶבְיוֹן׃\nלְהוֹשִׁיבִי עִם נְדִיבִים עִם נְדִיבֵי עַמּוֹ׃\nמוֹשִׁיבִי עֲקֶרֶת הַבַּיִת אֵם הַבָּנִים שְׂמֵחָה הַלְלוּיָהּ׃',
+        transliteration: 'M\'kimi mei-afar dal, mei-ashpot yarim evyon.\nL\'hoshivi im n\'divim, im n\'divei amo.\nMoshivi akeret ha-bayit, eim ha-banim s\'meichah, Hal\'luyah.',
+        translation: 'He raises the poor from the dust, from the trash heaps He lifts the needy,\nto seat them with nobles, with the nobles of His people.\nHe seats the barren woman of the house as a joyful mother of children. Halleluyah!',
+        notes: 'דָּל = poor/lowly. אֶבְיוֹן = needy. נְדִיבִים = nobles. עֲקֶרֶת = barren woman. שְׂמֵחָה = joyful.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      // Psalm 114
+      {
+        id: 'hallel-4',
+        sortOrder: 4,
+        hebrewText: 'בְּצֵאת יִשְׂרָאֵל מִמִּצְרָיִם בֵּית יַעֲקֹב מֵעַם לֹעֵז׃\nהָיְתָה יְהוּדָה לְקָדְשׁוֹ יִשְׂרָאֵל מַמְשְׁלוֹתָיו׃\nהַיָּם רָאָה וַיָּנֹס הַיַּרְדֵּן יִסֹּב לְאָחוֹר׃\nהֶהָרִים רָקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי צֹאן׃',
+        transliteration: 'B\'tzeit Yisrael mi-Mitzrayim, beit Ya\'akov mei-am lo\'eiz.\nHay\'tah Y\'hudah l\'kodsho, Yisrael mamsh\'lotav.\nHa-yam ra-ah va-yanos, ha-Yardein yisov l\'achor.\nHe-harim rak\'du ch\'eilim, g\'va-ot kiv\'nei tzon.',
+        translation: 'When Israel went out of Egypt, the house of Jacob from a people of strange language,\nJudah became His holy one, Israel His dominion.\nThe sea saw and fled; the Jordan turned backward.\nThe mountains skipped like rams, the hills like young sheep.',
+        notes: 'בְּצֵאת = when they went out. לֹעֵז = of foreign speech. וַיָּנֹס = and it fled. רָקְדוּ = skipped/danced. אֵילִים = rams.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      {
+        id: 'hallel-5',
+        sortOrder: 5,
+        hebrewText: 'מַה לְּךָ הַיָּם כִּי תָנוּס הַיַּרְדֵּן תִּסֹּב לְאָחוֹר׃\nהֶהָרִים תִּרְקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי צֹאן׃\nמִלִּפְנֵי אָדוֹן חוּלִי אָרֶץ מִלִּפְנֵי אֱלוֹהַּ יַעֲקֹב׃\nהַהֹפְכִי הַצּוּר אֲגַם מָיִם חַלָּמִישׁ לְמַעְיְנוֹ מָיִם׃',
+        transliteration: 'Mah l\'cha ha-yam ki tanus, ha-Yardein tisov l\'achor.\nHe-harim tirk\'du ch\'eilim, g\'va-ot kiv\'nei tzon.\nMi-lifnei Adon chuli aretz, mi-lifnei Elo-ah Ya\'akov.\nHa-hofchi ha-tzur agam mayim, chalamish l\'ma-y\'no mayim.',
+        translation: 'What is with you, O sea, that you flee? O Jordan, that you turn backward?\nO mountains, that you skip like rams? O hills, like young sheep?\nTremble, O earth, before the Master, before the God of Jacob,\nWho turns the rock into a pool of water, the flint into a spring of water.',
+        notes: 'חוּלִי = tremble! אָדוֹן = Master. אֲגַם = pool. חַלָּמִישׁ = flint. Refers to miracles at the Exodus and in the wilderness.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      // Psalm 115 (verses 1-11 skipped in Half Hallel)
+      {
+        id: 'hallel-6',
+        sortOrder: 6,
+        hebrewText: 'לֹא לָנוּ יְהוָה לֹא לָנוּ כִּי לְשִׁמְךָ תֵּן כָּבוֹד עַל חַסְדְּךָ עַל אֲמִתֶּךָ׃\nלָמָּה יֹאמְרוּ הַגּוֹיִם אַיֵּה נָא אֱלֹהֵיהֶם׃\nוֵאלֹהֵינוּ בַשָּׁמָיִם כֹּל אֲשֶׁר חָפֵץ עָשָׂה׃',
+        transliteration: 'Lo lanu Adonai, lo lanu, ki l\'shimcha tein kavod, al chasd\'cha al amitecha.\nLamah yom\'ru ha-goyim, ayeih na Eloheihem.\nVei-loheinu va-shamayim, kol asher chafeitz asah.',
+        translation: 'Not for our sake, O God, not for our sake, but for Your name give glory, for Your kindness and Your truth.\nWhy should the nations say, "Where now is their God?"\nOur God is in the heavens; whatever He desires, He does.',
+        notes: 'לֹא לָנוּ = not for us. כָּבוֹד = glory/honor. חַסְדְּךָ = Your kindness. Skipped during Half Hallel (Rosh Chodesh, intermediate days of Pesach).',
+        amud: { role: 'both', instruction: 'Skipped in Half Hallel.' },
+      },
+      {
+        id: 'hallel-7',
+        sortOrder: 7,
+        hebrewText: 'עֲצַבֵּיהֶם כֶּסֶף וְזָהָב מַעֲשֵׂה יְדֵי אָדָם׃\nפֶּה לָהֶם וְלֹא יְדַבֵּרוּ עֵינַיִם לָהֶם וְלֹא יִרְאוּ׃\nאָזְנַיִם לָהֶם וְלֹא יִשְׁמָעוּ אַף לָהֶם וְלֹא יְרִיחוּן׃\nיְדֵיהֶם וְלֹא יְמִישׁוּן רַגְלֵיהֶם וְלֹא יְהַלֵּכוּ לֹא יֶהְגּוּ בִּגְרוֹנָם׃\nכְּמוֹהֶם יִהְיוּ עֹשֵׂיהֶם כֹּל אֲשֶׁר בֹּטֵחַ בָּהֶם׃',
+        transliteration: 'Atzabeihem kesef v\'zahav, ma-asei y\'dei adam.\nPeh lahem v\'lo y\'dabeiru, einayim lahem v\'lo yir\'u.\nOznayim lahem v\'lo yishma-u, af lahem v\'lo y\'richun.\nY\'deihem v\'lo y\'mishun, ragleihem v\'lo y\'haleichu, lo yeh-gu big\'ronam.\nK\'mohem yih-yu oseihem, kol asher botei-ach bahem.',
+        translation: 'Their idols are silver and gold, the work of human hands.\nThey have a mouth but cannot speak; they have eyes but cannot see.\nThey have ears but cannot hear; they have a nose but cannot smell.\nTheir hands cannot feel; their feet cannot walk; they make no sound with their throat.\nThose who make them will become like them, all who trust in them.',
+        notes: 'עֲצַבֵּיהֶם = their idols. כֶּסֶף = silver. זָהָב = gold. בֹּטֵחַ = trusts. Skipped during Half Hallel.',
+        amud: { role: 'both', instruction: 'Skipped in Half Hallel.' },
+      },
+      {
+        id: 'hallel-8',
+        sortOrder: 8,
+        hebrewText: 'יִשְׂרָאֵל בְּטַח בַּיהוָה עֶזְרָם וּמָגִנָּם הוּא׃\nבֵּית אַהֲרֹן בִּטְחוּ בַיהוָה עֶזְרָם וּמָגִנָּם הוּא׃\nיִרְאֵי יְהוָה בִּטְחוּ בַיהוָה עֶזְרָם וּמָגִנָּם הוּא׃',
+        transliteration: 'Yisrael b\'tach ba-Adonai, ezram u-maginam hu.\nBeit Aharon bit\'chu va-Adonai, ezram u-maginam hu.\nYir\'ei Adonai bit\'chu va-Adonai, ezram u-maginam hu.',
+        translation: 'Israel, trust in God — He is their help and their shield.\nHouse of Aaron, trust in God — He is their help and their shield.\nThose who fear God, trust in God — He is their help and their shield.',
+        notes: 'בְּטַח = trust! עֶזְרָם = their help. מָגִנָּם = their shield. Three groups: all Israel, the Kohanim, and all God-fearers. Skipped during Half Hallel.',
+        amud: { role: 'both', instruction: 'Skipped in Half Hallel.' },
+      },
+      {
+        id: 'hallel-9',
+        sortOrder: 9,
+        hebrewText: 'יְהוָה זְכָרָנוּ יְבָרֵךְ יְבָרֵךְ אֶת בֵּית יִשְׂרָאֵל יְבָרֵךְ אֶת בֵּית אַהֲרֹן׃\nיְבָרֵךְ יִרְאֵי יְהוָה הַקְּטַנִּים עִם הַגְּדֹלִים׃\nיֹסֵף יְהוָה עֲלֵיכֶם עֲלֵיכֶם וְעַל בְּנֵיכֶם׃\nבְּרוּכִים אַתֶּם לַיהוָה עֹשֵׂה שָׁמַיִם וָאָרֶץ׃',
+        transliteration: 'Adonai z\'charanu y\'vareich, y\'vareich et beit Yisrael, y\'vareich et beit Aharon.\nY\'vareich yir\'ei Adonai, ha-k\'tanim im ha-g\'dolim.\nYoseif Adonai aleichem, aleichem v\'al b\'neichem.\nB\'ruchim atem la-Adonai, osei shamayim va-aretz.',
+        translation: 'God has remembered us; He will bless — He will bless the house of Israel, He will bless the house of Aaron.\nHe will bless those who fear God, the small together with the great.\nMay God increase you, you and your children.\nYou are blessed by God, Maker of heaven and earth.',
+        notes: 'זְכָרָנוּ = He remembered us. יְבָרֵךְ = He will bless. הַקְּטַנִּים = the small ones. Resume here in Half Hallel.',
+        amud: { role: 'both', instruction: 'Resume here in Half Hallel.' },
+      },
+      {
+        id: 'hallel-10',
+        sortOrder: 10,
+        hebrewText: 'הַשָּׁמַיִם שָׁמַיִם לַיהוָה וְהָאָרֶץ נָתַן לִבְנֵי אָדָם׃\nלֹא הַמֵּתִים יְהַלְלוּ יָהּ וְלֹא כָּל יֹרְדֵי דוּמָה׃\nוַאֲנַחְנוּ נְבָרֵךְ יָהּ מֵעַתָּה וְעַד עוֹלָם הַלְלוּיָהּ׃',
+        transliteration: 'Ha-shamayim shamayim la-Adonai, v\'ha-aretz natan liv\'nei adam.\nLo ha-meitim y\'hal\'lu Yah, v\'lo kol yor\'dei dumah.\nVa-anachnu n\'vareich Yah, mei-atah v\'ad olam, Hal\'luyah.',
+        translation: 'The heavens are the heavens of God, but the earth He gave to mankind.\nThe dead do not praise God, nor do any who go down to silence.\nBut we will bless God from now and forever. Halleluyah!',
+        notes: 'הַמֵּתִים = the dead. דוּמָה = silence (the grave). נְבָרֵךְ = we will bless. The living must praise God.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      // Psalm 116 (verses 1-11 skipped in Half Hallel)
+      {
+        id: 'hallel-11',
+        sortOrder: 11,
+        hebrewText: 'אָהַבְתִּי כִּי יִשְׁמַע יְהוָה אֶת קוֹלִי תַּחֲנוּנָי׃\nכִּי הִטָּה אָזְנוֹ לִי וּבְיָמַי אֶקְרָא׃\nאֲפָפוּנִי חֶבְלֵי מָוֶת וּמְצָרֵי שְׁאוֹל מְצָאוּנִי צָרָה וְיָגוֹן אֶמְצָא׃\nוּבְשֵׁם יְהוָה אֶקְרָא אָנָּה יְהוָה מַלְּטָה נַפְשִׁי׃',
+        transliteration: 'Ahavti ki yishma Adonai et koli tachanunai.\nKi hitah ozno li, u-v\'yamai ekra.\nAfafuni chevlei mavet, u-m\'tzarei sh\'ol m\'tza-uni, tzarah v\'yagon emtza.\nU-v\'sheim Adonai ekra, anah Adonai mal\'tah nafshi.',
+        translation: 'I love that God hears my voice, my supplications.\nFor He has inclined His ear to me, and in my days I will call out.\nThe pangs of death encircled me, and the straits of the grave found me; I found trouble and sorrow.\nAnd I call upon the name of God: "Please, God, save my soul!"',
+        notes: 'אָהַבְתִּי = I loved. תַּחֲנוּנָי = my supplications. חֶבְלֵי מָוֶת = pangs of death. שְׁאוֹל = the grave. Skipped during Half Hallel.',
+        amud: { role: 'both', instruction: 'Skipped in Half Hallel.' },
+      },
+      {
+        id: 'hallel-12',
+        sortOrder: 12,
+        hebrewText: 'חַנּוּן יְהוָה וְצַדִּיק וֵאלֹהֵינוּ מְרַחֵם׃\nשֹׁמֵר פְּתָאיִם יְהוָה דַּלֹּתִי וְלִי יְהוֹשִׁיעַ׃\nשׁוּבִי נַפְשִׁי לִמְנוּחָיְכִי כִּי יְהוָה גָּמַל עָלָיְכִי׃',
+        transliteration: 'Chanun Adonai v\'tzadik, vEiloheinu m\'racheim.\nShomeir p\'ta-im Adonai, daloti v\'li y\'hoshi-a.\nShuvi nafshi lim\'nuchaychi, ki Adonai gamal alaychi.',
+        translation: 'God is gracious and righteous; our God is compassionate.\nGod protects the simple; I was brought low and He saved me.\nReturn, my soul, to your rest, for God has dealt bountifully with you.',
+        notes: 'חַנּוּן = gracious. צַדִּיק = righteous. מְרַחֵם = compassionate. פְּתָאיִם = the simple/naive. Skipped during Half Hallel.',
+        amud: { role: 'both', instruction: 'Skipped in Half Hallel.' },
+      },
+      {
+        id: 'hallel-13',
+        sortOrder: 13,
+        hebrewText: 'כִּי חִלַּצְתָּ נַפְשִׁי מִמָּוֶת אֶת עֵינִי מִן דִּמְעָה אֶת רַגְלִי מִדֶּחִי׃\nאֶתְהַלֵּךְ לִפְנֵי יְהוָה בְּאַרְצוֹת הַחַיִּים׃\nהֶאֱמַנְתִּי כִּי אֲדַבֵּר אֲנִי עָנִיתִי מְאֹד׃\nאֲנִי אָמַרְתִּי בְחָפְזִי כָּל הָאָדָם כֹּזֵב׃',
+        transliteration: 'Ki chilatzta nafshi mi-mavet, et eini min dim\'ah, et ragli mi-dechi.\nEt-haleich lif\'nei Adonai b\'artzot ha-chayim.\nHe-emanti ki adabeir, ani aniti m\'od.\nAni amarti v\'chofzi, kol ha-adam kozeiv.',
+        translation: 'For You have rescued my soul from death, my eyes from tears, my feet from stumbling.\nI will walk before God in the lands of the living.\nI kept faith even when I said, "I am greatly afflicted."\nI said in my haste, "All mankind is deceitful."',
+        notes: 'חִלַּצְתָּ = You rescued. דִּמְעָה = tears. אַרְצוֹת הַחַיִּים = lands of the living. Skipped during Half Hallel.',
+        amud: { role: 'both', instruction: 'Skipped in Half Hallel.' },
+      },
+      {
+        id: 'hallel-14',
+        sortOrder: 14,
+        hebrewText: 'מָה אָשִׁיב לַיהוָה כָּל תַּגְמוּלוֹהִי עָלָי׃\nכּוֹס יְשׁוּעוֹת אֶשָּׂא וּבְשֵׁם יְהוָה אֶקְרָא׃\nנְדָרַי לַיהוָה אֲשַׁלֵּם נֶגְדָה נָּא לְכָל עַמּוֹ׃\nיָקָר בְּעֵינֵי יְהוָה הַמָּוְתָה לַחֲסִידָיו׃',
+        transliteration: 'Mah ashiv la-Adonai, kol tagmulohi alai.\nKos y\'shu-ot esa, u-v\'sheim Adonai ekra.\nN\'darai la-Adonai ashaleim, neg\'dah na l\'chol amo.\nYakar b\'einei Adonai, ha-mav\'tah la-chasidav.',
+        translation: 'How can I repay God for all His bounties to me?\nI will raise the cup of salvations and call upon the name of God.\nMy vows to God I will fulfill, in the presence of all His people.\nPrecious in the eyes of God is the death of His devoted ones.',
+        notes: 'כּוֹס יְשׁוּעוֹת = cup of salvations. נְדָרַי = my vows. יָקָר = precious. חֲסִידָיו = His devoted ones. Resume here in Half Hallel.',
+        amud: { role: 'both', instruction: 'Resume here in Half Hallel.' },
+      },
+      {
+        id: 'hallel-15',
+        sortOrder: 15,
+        hebrewText: 'אָנָּה יְהוָה כִּי אֲנִי עַבְדֶּךָ אֲנִי עַבְדְּךָ בֶּן אֲמָתֶךָ פִּתַּחְתָּ לְמוֹסֵרָי׃\nלְךָ אֶזְבַּח זֶבַח תּוֹדָה וּבְשֵׁם יְהוָה אֶקְרָא׃\nנְדָרַי לַיהוָה אֲשַׁלֵּם נֶגְדָה נָּא לְכָל עַמּוֹ׃\nבְּחַצְרוֹת בֵּית יְהוָה בְּתוֹכֵכִי יְרוּשָׁלָיִם הַלְלוּיָהּ׃',
+        transliteration: 'Anah Adonai ki ani avdecha, ani avd\'cha ben amatecha, pitachta l\'moseirai.\nL\'cha ezbach zevach todah, u-v\'sheim Adonai ekra.\nN\'darai la-Adonai ashaleim, neg\'dah na l\'chol amo.\nB\'chatzrot beit Adonai, b\'socheichi Y\'rushalayim, Hal\'luyah.',
+        translation: 'Please, God — for I am Your servant; I am Your servant, the son of Your maidservant — You have loosened my bonds.\nTo You I will offer a thanksgiving offering, and I will call upon the name of God.\nMy vows to God I will fulfill, in the presence of all His people,\nin the courtyards of the house of God, in your midst, O Jerusalem. Halleluyah!',
+        notes: 'עַבְדֶּךָ = Your servant. פִּתַּחְתָּ = You opened/loosened. מוֹסֵרָי = my bonds. זֶבַח תּוֹדָה = thanksgiving offering.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      // Psalm 117
+      {
+        id: 'hallel-16',
+        sortOrder: 16,
+        hebrewText: 'הַלְלוּ אֶת יְהוָה כָּל גּוֹיִם שַׁבְּחוּהוּ כָּל הָאֻמִּים׃\nכִּי גָבַר עָלֵינוּ חַסְדּוֹ וֶאֱמֶת יְהוָה לְעוֹלָם הַלְלוּיָהּ׃',
+        transliteration: 'Hal\'lu et Adonai kol goyim, shab\'chuhu kol ha-umim.\nKi gavar aleinu chasdo, ve-emet Adonai l\'olam, Hal\'luyah.',
+        translation: 'Praise God, all nations; extol Him, all peoples!\nFor His kindness overwhelms us, and the truth of God is forever. Halleluyah!',
+        notes: 'שַׁבְּחוּהוּ = extol/praise Him. גָבַר = was mighty/overwhelmed. This is the shortest chapter in all of Tanach — just two verses.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      // Psalm 118
+      {
+        id: 'hallel-17',
+        sortOrder: 17,
+        hebrewText: 'הוֹדוּ לַיהוָה כִּי טוֹב כִּי לְעוֹלָם חַסְדּוֹ׃\nיֹאמַר נָא יִשְׂרָאֵל כִּי לְעוֹלָם חַסְדּוֹ׃\nיֹאמְרוּ נָא בֵית אַהֲרֹן כִּי לְעוֹלָם חַסְדּוֹ׃\nיֹאמְרוּ נָא יִרְאֵי יְהוָה כִּי לְעוֹלָם חַסְדּוֹ׃',
+        transliteration: 'Hodu la-Adonai ki tov, ki l\'olam chasdo.\nYomar na Yisrael, ki l\'olam chasdo.\nYom\'ru na veit Aharon, ki l\'olam chasdo.\nYom\'ru na yir\'ei Adonai, ki l\'olam chasdo.',
+        translation: 'Give thanks to God, for He is good, for His kindness is forever.\nLet Israel say: "His kindness is forever."\nLet the house of Aaron say: "His kindness is forever."\nLet those who fear God say: "His kindness is forever."',
+        notes: 'הוֹדוּ = give thanks. לְעוֹלָם חַסְדּוֹ = His kindness is forever. The leader calls each verse and the congregation responds.',
+        amud: { role: 'shaliach_tzibbur', instruction: 'The prayer leader calls out each verse, and the congregation responds with "ki l\'olam chasdo."', congregationResponse: 'כִּי לְעוֹלָם חַסְדּוֹ', congregationResponseTransliteration: 'Ki l\'olam chasdo' },
+      },
+      {
+        id: 'hallel-18',
+        sortOrder: 18,
+        hebrewText: 'מִן הַמֵּצַר קָרָאתִי יָּהּ עָנָנִי בַמֶּרְחָב יָהּ׃\nיְהוָה לִי לֹא אִירָא מַה יַּעֲשֶׂה לִי אָדָם׃\nיְהוָה לִי בְּעֹזְרָי וַאֲנִי אֶרְאֶה בְשֹׂנְאָי׃\nטוֹב לַחֲסוֹת בַּיהוָה מִבְּטֹחַ בָּאָדָם׃\nטוֹב לַחֲסוֹת בַּיהוָה מִבְּטֹחַ בִּנְדִיבִים׃',
+        transliteration: 'Min ha-meitzar karati Yah, anani va-merchav Yah.\nAdonai li, lo ira, mah ya-aseh li adam.\nAdonai li b\'oz\'rai, va-ani er-eh v\'son\'ai.\nTov lachasot ba-Adonai, mi-b\'to-ach ba-adam.\nTov lachasot ba-Adonai, mi-b\'to-ach bin\'divim.',
+        translation: 'From the narrow straits I called to God; God answered me with expansiveness.\nGod is with me, I will not fear — what can man do to me?\nGod is with me, among my helpers, and I will see the downfall of my enemies.\nIt is better to take refuge in God than to trust in man.\nIt is better to take refuge in God than to trust in nobles.',
+        notes: 'מִן הַמֵּצַר = from the narrow straits/distress. מֶרְחָב = expansiveness. לֹא אִירָא = I will not fear. לַחֲסוֹת = to take refuge.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      {
+        id: 'hallel-19',
+        sortOrder: 19,
+        hebrewText: 'כָּל גּוֹיִם סְבָבוּנִי בְּשֵׁם יְהוָה כִּי אֲמִילַם׃\nסַבּוּנִי גַם סְבָבוּנִי בְּשֵׁם יְהוָה כִּי אֲמִילַם׃\nסַבּוּנִי כִדְבוֹרִים דֹּעֲכוּ כְּאֵשׁ קוֹצִים בְּשֵׁם יְהוָה כִּי אֲמִילַם׃\nדַּחֹה דְחִיתַנִי לִנְפֹּל וַיהוָה עֲזָרָנִי׃\nעָזִּי וְזִמְרָת יָהּ וַיְהִי לִי לִישׁוּעָה׃',
+        transliteration: 'Kol goyim s\'vavuni, b\'sheim Adonai ki amilam.\nSabuni gam s\'vavuni, b\'sheim Adonai ki amilam.\nSabuni chid\'vorim, do-achu k\'eish kotzim, b\'sheim Adonai ki amilam.\nDachoh d\'chitani lin\'pol, va-Adonai azarani.\nOzi v\'zimrat Yah, vay\'hi li lishu-ah.',
+        translation: 'All nations surrounded me — in the name of God I will cut them down.\nThey surrounded me, they encircled me — in the name of God I will cut them down.\nThey surrounded me like bees, they were extinguished like a fire of thorns — in the name of God I will cut them down.\nYou pushed me hard to make me fall, but God helped me.\nMy strength and song is God, and He has become my salvation.',
+        notes: 'סְבָבוּנִי = they surrounded me. אֲמִילַם = I will cut them down. כִדְבוֹרִים = like bees. עָזִּי וְזִמְרָת = my strength and song.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      {
+        id: 'hallel-20',
+        sortOrder: 20,
+        hebrewText: 'קוֹל רִנָּה וִישׁוּעָה בְּאָהֳלֵי צַדִּיקִים יְמִין יְהוָה עֹשָׂה חָיִל׃\nיְמִין יְהוָה רוֹמֵמָה יְמִין יְהוָה עֹשָׂה חָיִל׃\nלֹא אָמוּת כִּי אֶחְיֶה וַאֲסַפֵּר מַעֲשֵׂי יָהּ׃\nיַסֹּר יִסְּרַנִּי יָּהּ וְלַמָּוֶת לֹא נְתָנָנִי׃',
+        transliteration: 'Kol rinah vishu-ah b\'oholei tzadikim, y\'min Adonai osah chayil.\nY\'min Adonai romeimah, y\'min Adonai osah chayil.\nLo amut ki ech\'yeh, va-asapeir ma-asei Yah.\nYasor yis\'rani Yah, v\'la-mavet lo n\'tanani.',
+        translation: 'The sound of joyful song and salvation is in the tents of the righteous: "The right hand of God acts with valor!"\n"The right hand of God is exalted! The right hand of God acts with valor!"\nI will not die, but I will live and tell of the deeds of God.\nGod has chastened me greatly, but He has not given me over to death.',
+        notes: 'רִנָּה = joyful song. צַדִּיקִים = righteous ones. יְמִין = right hand. חָיִל = valor/strength. רוֹמֵמָה = is exalted.',
+        amud: { role: 'both', instruction: 'Recited by the individual or together with the congregation.' },
+      },
+      {
+        id: 'hallel-21',
+        sortOrder: 21,
+        hebrewText: 'פִּתְחוּ לִי שַׁעֲרֵי צֶדֶק אָבֹא בָם אוֹדֶה יָהּ׃\nזֶה הַשַּׁעַר לַיהוָה צַדִּיקִים יָבֹאוּ בוֹ׃\nאוֹדְךָ כִּי עֲנִיתָנִי וַתְּהִי לִי לִישׁוּעָה׃\nאוֹדְךָ כִּי עֲנִיתָנִי וַתְּהִי לִי לִישׁוּעָה׃\nאֶבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה׃\nאֶבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה׃\nמֵאֵת יְהוָה הָיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵינוּ׃\nמֵאֵת יְהוָה הָיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵינוּ׃\nזֶה הַיּוֹם עָשָׂה יְהוָה נָגִילָה וְנִשְׂמְחָה בוֹ׃\nזֶה הַיּוֹם עָשָׂה יְהוָה נָגִילָה וְנִשְׂמְחָה בוֹ׃',
+        transliteration: 'Pitchu li sha-arei tzedek, avo vam odeh Yah.\nZeh ha-sha-ar la-Adonai, tzadikim yavo-u vo.\nOd\'cha ki anitani, vat\'hi li lishu-ah.\nOd\'cha ki anitani, vat\'hi li lishu-ah.\nEven ma-asu ha-bonim, hay\'tah l\'rosh pinah.\nEven ma-asu ha-bonim, hay\'tah l\'rosh pinah.\nMei-eit Adonai hay\'tah zot, hi niflat b\'eineinu.\nMei-eit Adonai hay\'tah zot, hi niflat b\'eineinu.\nZeh ha-yom asah Adonai, nagilah v\'nism\'chah vo.\nZeh ha-yom asah Adonai, nagilah v\'nism\'chah vo.',
+        translation: 'Open for me the gates of righteousness; I will enter them and thank God.\nThis is the gate of God; the righteous will enter through it.\nI thank You, for You answered me, and You have become my salvation. (x2)\nThe stone that the builders rejected has become the cornerstone. (x2)\nThis was from God; it is wondrous in our eyes. (x2)\nThis is the day that God has made; let us rejoice and be glad in it. (x2)',
+        notes: 'שַׁעֲרֵי צֶדֶק = gates of righteousness. אֶבֶן = stone. רֹאשׁ פִּנָּה = cornerstone. נִפְלָאת = wondrous. נָגִילָה = let us rejoice. From Od\'cha onward, each verse is said twice.',
+        amud: { role: 'both', instruction: 'From Od\'cha onward, each verse is recited twice. In a congregation, the leader says each verse and the congregation repeats it.' },
+      },
+      {
+        id: 'hallel-22',
+        sortOrder: 22,
+        hebrewText: 'אָנָּא יְהוָה הוֹשִׁיעָה נָּא׃\nאָנָּא יְהוָה הוֹשִׁיעָה נָּא׃\nאָנָּא יְהוָה הַצְלִיחָה נָּא׃\nאָנָּא יְהוָה הַצְלִיחָה נָּא׃',
+        transliteration: 'Ana Adonai hoshi-ah na.\nAna Adonai hoshi-ah na.\nAna Adonai hatzlichah na.\nAna Adonai hatzlichah na.',
+        translation: 'Please, God, save us now!\nPlease, God, save us now!\nPlease, God, grant us success now!\nPlease, God, grant us success now!',
+        notes: 'אָנָּא = please. הוֹשִׁיעָה נָּא = save us, please. הַצְלִיחָה נָּא = grant success, please. Each line is said twice. One of the most intense moments of Hallel — a direct, heartfelt plea.',
+        amud: { role: 'both', instruction: 'Each line is recited twice. In a congregation, the leader says the line and the congregation repeats it.' },
+      },
+      {
+        id: 'hallel-23',
+        sortOrder: 23,
+        hebrewText: 'בָּרוּךְ הַבָּא בְּשֵׁם יְהוָה בֵּרַכְנוּכֶם מִבֵּית יְהוָה׃\nבָּרוּךְ הַבָּא בְּשֵׁם יְהוָה בֵּרַכְנוּכֶם מִבֵּית יְהוָה׃\nאֵל יְהוָה וַיָּאֶר לָנוּ אִסְרוּ חַג בַּעֲבֹתִים עַד קַרְנוֹת הַמִּזְבֵּחַ׃\nאֵל יְהוָה וַיָּאֶר לָנוּ אִסְרוּ חַג בַּעֲבֹתִים עַד קַרְנוֹת הַמִּזְבֵּחַ׃\nאֵלִי אַתָּה וְאוֹדֶךָּ אֱלֹהַי אֲרוֹמְמֶךָּ׃\nאֵלִי אַתָּה וְאוֹדֶךָּ אֱלֹהַי אֲרוֹמְמֶךָּ׃\nהוֹדוּ לַיהוָה כִּי טוֹב כִּי לְעוֹלָם חַסְדּוֹ׃\nהוֹדוּ לַיהוָה כִּי טוֹב כִּי לְעוֹלָם חַסְדּוֹ׃',
+        transliteration: 'Baruch ha-ba b\'sheim Adonai, beirachnu-chem mi-beit Adonai. (x2)\nEil Adonai va-ya-eir lanu, isru chag ba-avotim ad karnot ha-mizbei-ach. (x2)\nEili atah v\'odeka, Elohai arom\'meka. (x2)\nHodu la-Adonai ki tov, ki l\'olam chasdo. (x2)',
+        translation: 'Blessed is the one who comes in the name of God; we bless you from the house of God. (x2)\nGod is the Lord and He has given us light; bind the festival offering with cords to the corners of the altar. (x2)\nYou are my God and I will thank You; my God, I will exalt You. (x2)\nGive thanks to God, for He is good, for His kindness is forever. (x2)',
+        notes: 'בָּרוּךְ הַבָּא = blessed is the one who comes. וַיָּאֶר = and He illuminated. אִסְרוּ = bind. קַרְנוֹת הַמִּזְבֵּחַ = corners of the altar. Each verse is said twice. Hallel ends as it began — with "Hodu la-Adonai ki tov."',
+        amud: { role: 'both', instruction: 'Each verse is recited twice. Hallel ends as it began — with "Hodu la-Adonai ki tov, ki l\'olam chasdo."' },
+      },
+    ],
+  },
 ];
 
 // ==========================================
@@ -1621,7 +1851,18 @@ const BRACHOS: Prayer[] = [
 // Combined Export
 // ==========================================
 
-export const PRAYERS: Prayer[] = [...TEFILLAH_PRAYERS, ...BRACHOS];
+// Merge auto-generated word timings into prayer sections
+function mergeWordTimings(prayers: Prayer[]): Prayer[] {
+  return prayers.map(prayer => ({
+    ...prayer,
+    sections: prayer.sections.map(section => ({
+      ...section,
+      wordTimings: section.wordTimings ?? WORD_TIMINGS[section.id],
+    })),
+  }));
+}
+
+export const PRAYERS: Prayer[] = mergeWordTimings([...TEFILLAH_PRAYERS, ...BRACHOS]);
 
 export function getPrayerBySlug(slug: string): Prayer | undefined {
   return PRAYERS.find(p => p.slug === slug);

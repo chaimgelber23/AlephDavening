@@ -13,8 +13,10 @@ interface NavItemConfig {
 
 const NAV_ITEMS: NavItemConfig[] = [
   { href: '/', label: 'Home', icon: HomeIcon },
-  { href: '/siddur', label: 'Siddur', icon: SiddurIcon },
-  { href: '/settings', label: 'Settings', icon: SettingsIcon, authOnly: true },
+  { href: '/siddur', label: 'Daven', icon: SiddurIcon },
+  { href: '/amud', label: 'Amud', icon: AmudIcon },
+  { href: '/guide', label: 'Living', icon: LivingIcon },
+  { href: '/brachot', label: 'Brachot', icon: BrachotIcon },
 ];
 
 export function BottomNav() {
@@ -24,11 +26,11 @@ export function BottomNav() {
   return (
     <>
       {/* Spacer to prevent content from hiding behind fixed nav */}
-      <div className="h-20" />
-      <nav className="fixed bottom-0 left-0 right-0 z-50">
-        {/* Frosted glass background */}
-        <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/60 shadow-[0_-1px_3px_rgba(0,0,0,0.04)]">
-          <div className="max-w-md mx-auto flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)]">
+      <div className="h-24" />
+      <nav className="fixed bottom-4 left-4 right-4 z-50 pointer-events-none">
+        {/* Floating Frosted glass pill */}
+        <div className="pointer-events-auto max-w-md mx-auto bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.12)] rounded-[2rem] overflow-hidden">
+          <div className="flex items-center justify-around px-2 py-1">
             {NAV_ITEMS.map((item) => {
               if (item.authOnly && authStatus !== 'authenticated') {
                 return (
@@ -77,21 +79,20 @@ function NavLink({
     <Link
       href={href}
       className={`
-        relative flex flex-col items-center justify-center gap-0.5 py-2 px-3 min-w-[56px]
-        transition-colors duration-200
-        ${active ? 'text-[#1B4965]' : 'text-gray-400 active:text-gray-500'}
+        relative flex flex-col items-center justify-center gap-1 py-2 px-3 min-w-[64px] rounded-xl
+        transition-all duration-300 ease-out hover:bg-black/5
+        ${active ? 'text-[var(--primary)] scale-105' : 'text-gray-400 active:scale-95'}
       `}
     >
       <div className="relative">
         <Icon active={active} />
         {active && (
-          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#1B4965]" />
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--gold)] shadow-[0_0_8px_rgba(181,132,43,0.6)]" />
         )}
       </div>
       <span
-        className={`text-[10px] mt-0.5 ${
-          active ? 'font-semibold' : 'font-medium'
-        }`}
+        className={`text-[10px] tracking-wide transition-all ${active ? 'font-bold opacity-100' : 'font-medium opacity-80'
+          }`}
       >
         {label}
       </span>
@@ -127,16 +128,46 @@ function SiddurIcon({ active }: { active: boolean }) {
   );
 }
 
-function SettingsIcon({ active }: { active: boolean }) {
+function AmudIcon({ active }: { active: boolean }) {
   return active ? (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 2a3 3 0 0 0-3 3v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-3V5a3 3 0 0 0-3-3z" />
+      <path d="M9 14h6M9 18h6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ) : (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 2a3 3 0 0 0-3 3v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-3V5a3 3 0 0 0-3-3z" />
+      <path d="M9 14h6M9 18h6" />
+    </svg>
+  );
+}
+
+function LivingIcon({ active }: { active: boolean }) {
+  return active ? (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  ) : (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  );
+}
+
+function BrachotIcon({ active }: { active: boolean }) {
+  return active ? (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+      <path d="M6 1v3M10 1v3M14 1v3" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ) : (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+      <path d="M6 1v3M10 1v3M14 1v3" />
     </svg>
   );
 }

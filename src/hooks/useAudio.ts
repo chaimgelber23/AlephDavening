@@ -26,6 +26,11 @@ interface UseAudioOptions {
   voiceGender?: VoiceGender;
 }
 
+interface AudioTimeRange {
+  startTime: number;
+  endTime?: number;
+}
+
 /**
  * Try to play a pre-generated static file first.
  * Returns the URL if it exists, null otherwise.
@@ -59,25 +64,80 @@ async function tryStaticFile(
   return null;
 }
 
+/**
+ * Try to find a full-prayer Siddur Audio recording.
+ * Convention: /audio/prayers/{prayerId}/{prayerId}-sidduraudio.mp3
+ */
+async function trySiddurAudioFile(prayerId: string): Promise<string | null> {
+  const url = `/audio/prayers/${prayerId}/${prayerId}-sidduraudio.mp3`;
+  try {
+    const res = await fetch(url, { method: 'HEAD' });
+    if (res.ok) return url;
+  } catch {
+    // doesn't exist
+  }
+  return null;
+}
+
 export function useAudio(options?: UseAudioOptions) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentUrlRef = useRef<string | null>(null);
+  const timeRangeRef = useRef<AudioTimeRange | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+
+  const stopTimeTracking = useCallback(() => {
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+  }, []);
 
   const stop = useCallback(() => {
+    stopTimeTracking();
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
     setIsPlaying(false);
-  }, []);
+    setCurrentTime(0);
+    timeRangeRef.current = null;
+  }, [stopTimeTracking]);
 
   const onEndedRef = useRef(options?.onEnded);
   onEndedRef.current = options?.onEnded;
 
-  const playAudioUrl = useCallback(async (url: string, speed: number, isBlob: boolean) => {
+  const startTimeTracking = useCallback((audio: HTMLAudioElement) => {
+    const track = () => {
+      if (!audio.paused) {
+        const range = timeRangeRef.current;
+        const time = audio.currentTime;
+
+        // If we have a time range and we've passed the end, stop
+        if (range?.endTime && time >= range.endTime) {
+          audio.pause();
+          setIsPlaying(false);
+          onEndedRef.current?.();
+          return;
+        }
+
+        setCurrentTime(range ? time - range.startTime : time);
+        animFrameRef.current = requestAnimationFrame(track);
+      }
+    };
+    animFrameRef.current = requestAnimationFrame(track);
+  }, []);
+
+  const playAudioUrl = useCallback(async (
+    url: string,
+    speed: number,
+    isBlob: boolean,
+    timeRange?: AudioTimeRange,
+  ) => {
     if (isBlob && currentUrlRef.current) {
       URL.revokeObjectURL(currentUrlRef.current);
     }
@@ -86,20 +146,40 @@ export function useAudio(options?: UseAudioOptions) {
     const audio = new Audio(url);
     audio.playbackRate = speed;
     audioRef.current = audio;
+    timeRangeRef.current = timeRange ?? null;
+
+    audio.onloadedmetadata = () => {
+      const totalDur = timeRange
+        ? (timeRange.endTime ?? audio.duration) - timeRange.startTime
+        : audio.duration;
+      setDuration(totalDur);
+    };
 
     audio.onended = () => {
+      stopTimeTracking();
       setIsPlaying(false);
       onEndedRef.current?.();
     };
     audio.onerror = () => {
+      stopTimeTracking();
       setIsPlaying(false);
       setError('Playback error');
     };
 
+    // Seek to start time if we have a time range
+    if (timeRange?.startTime) {
+      audio.currentTime = timeRange.startTime;
+    }
+
     await audio.play();
     setIsPlaying(true);
-  }, []);
+    startTimeTracking(audio);
+  }, [startTimeTracking, stopTimeTracking]);
 
+  /**
+   * Play a section of a prayer.
+   * Priority: static per-section file → full-prayer siddur audio → TTS fallback
+   */
   const play = useCallback(async (
     text: string,
     mode: AudioMode = 'hebrew',
@@ -115,7 +195,7 @@ export function useAudio(options?: UseAudioOptions) {
     const pronunciation = options?.pronunciation ?? 'modern';
 
     try {
-      // 1. Try pre-generated static file (uses pronunciation for file lookup)
+      // 1. Try pre-generated static file per section
       if (prayerId && sectionId) {
         const staticUrl = await tryStaticFile(prayerId, sectionId, pronunciation);
         if (staticUrl) {
@@ -125,7 +205,17 @@ export function useAudio(options?: UseAudioOptions) {
         }
       }
 
-      // 2. Fall back to TTS API
+      // 2. Try full-prayer Siddur Audio recording
+      if (prayerId) {
+        const siddurUrl = await trySiddurAudioFile(prayerId);
+        if (siddurUrl) {
+          await playAudioUrl(siddurUrl, speed, false);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // 3. Fall back to TTS API
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,5 +237,66 @@ export function useAudio(options?: UseAudioOptions) {
     }
   }, [stop, options?.speed, options?.pronunciation, options?.voiceGender, playAudioUrl]);
 
-  return { play, stop, isPlaying, isLoading, error };
+  /**
+   * Play audio from a direct URL, optionally with a time range.
+   * Used for service-level audio and source recordings.
+   */
+  const playSource = useCallback(async (
+    url: string,
+    speedOverride?: number,
+    timeRange?: AudioTimeRange,
+  ) => {
+    stop();
+    setError(null);
+    setIsLoading(true);
+
+    const speed = speedOverride ?? options?.speed ?? 1.0;
+
+    try {
+      await playAudioUrl(url, speed, false, timeRange);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Audio unavailable');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [stop, options?.speed, playAudioUrl]);
+
+  const seek = useCallback((time: number) => {
+    if (audioRef.current) {
+      const range = timeRangeRef.current;
+      audioRef.current.currentTime = range ? time + range.startTime : time;
+      setCurrentTime(time);
+    }
+  }, []);
+
+  const pause = useCallback(() => {
+    if (audioRef.current && isPlaying) {
+      audioRef.current.pause();
+      stopTimeTracking();
+      setIsPlaying(false);
+    }
+  }, [isPlaying, stopTimeTracking]);
+
+  const resume = useCallback(async () => {
+    if (audioRef.current && !isPlaying) {
+      await audioRef.current.play();
+      setIsPlaying(true);
+      startTimeTracking(audioRef.current);
+    }
+  }, [isPlaying, startTimeTracking]);
+
+  return {
+    play,
+    playSource,
+    stop,
+    pause,
+    resume,
+    seek,
+    isPlaying,
+    isLoading,
+    error,
+    currentTime,
+    duration,
+    audioElement: audioRef.current,
+  };
 }

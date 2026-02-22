@@ -1,14 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { useAudio } from '@/hooks/useAudio';
 import { useUserStore } from '@/stores/userStore';
 import type { PrayerSection } from '@/types';
 
 export function KaraokePlayer({
   section,
-  prayerId,
   currentWordIndex,
   progress,
   onTogglePlay,
@@ -16,7 +13,6 @@ export function KaraokePlayer({
   isLoading,
 }: {
   section: PrayerSection;
-  prayerId: string;
   currentWordIndex: number;
   progress: number;
   onTogglePlay: () => void;
@@ -125,15 +121,21 @@ export function KaraokePlayer({
             <p className="text-[10px] uppercase tracking-widest text-[#1B4965]/30 font-semibold mb-1 text-center">
               How to say it
             </p>
-            <div className="flex flex-wrap justify-center gap-x-1.5 gap-y-0.5">
+            <div className="flex flex-wrap justify-center gap-x-1.5 gap-y-0.5 leading-[1.8]">
               {translitWords.map((word, i) => {
+                const isPast = i < currentWordIndex;
                 const isCurrent = i === currentWordIndex;
+                const isFuture = i > currentWordIndex;
                 return (
                   <span
                     key={i}
-                    className={`text-base transition-all duration-200 ${
+                    className={`text-base transition-all duration-200 px-0.5 rounded ${
                       isCurrent
-                        ? 'text-[#1B4965] font-semibold'
+                        ? 'text-[#1B4965] font-semibold bg-[#5FA8D3]/15'
+                        : isPast && isPlaying
+                        ? 'text-[#1B4965]/35 italic'
+                        : isFuture && isPlaying
+                        ? 'text-[#1B4965]/60 italic'
                         : 'text-[#1B4965]/50 italic'
                     }`}
                   >
@@ -145,13 +147,32 @@ export function KaraokePlayer({
           </div>
         )}
 
-        {/* Translation */}
+        {/* Translation with progressive reveal */}
         {displaySettings.showTranslation && section.translation && (
           <div className="mt-3 pt-3 border-t border-gray-50 text-center">
             <p className="text-[10px] uppercase tracking-widest text-[#1B4965]/30 font-semibold mb-1">
               What it means
             </p>
-            <p className="text-sm text-gray-400">{section.translation}</p>
+            {isPlaying ? (
+              <p className="text-sm leading-relaxed">
+                {section.translation.split(' ').map((word, i, arr) => {
+                  const wordProgress = i / arr.length;
+                  const isRevealed = wordProgress <= progress;
+                  return (
+                    <span
+                      key={i}
+                      className={`transition-colors duration-300 ${
+                        isRevealed ? 'text-gray-600' : 'text-gray-300'
+                      }`}
+                    >
+                      {word}{' '}
+                    </span>
+                  );
+                })}
+              </p>
+            ) : (
+              <p className="text-sm text-gray-400">{section.translation}</p>
+            )}
           </div>
         )}
 

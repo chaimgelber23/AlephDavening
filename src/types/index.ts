@@ -365,3 +365,75 @@ export interface CardReview {
   state: 'new' | 'learning' | 'review' | 'relearning';
 }
 
+// ==========================================
+// DAILY LIVING GUIDE TYPES
+// ==========================================
+
+export type GuideCategory =
+  | 'morning_routine'
+  | 'brachot_food'
+  | 'personal_care'
+  | 'shabbat'
+  | 'daily_items'
+  | 'home';
+
+export interface GuideStep {
+  id: string;
+  sortOrder: number;
+  instruction: string;
+  hebrewText?: string;
+  transliteration?: string;
+  translation?: string;
+  audioUrl?: string;
+  tip?: string;
+}
+
+export interface GuideQuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  source?: string;
+}
+
+export interface Guide {
+  id: string;
+  slug: string;
+  title: string;
+  titleHebrew?: string;
+  category: GuideCategory;
+  sortOrder: number;
+  icon: string;
+  summary: string;
+  whenRelevant: string;
+  whyItMatters: string;
+  quickAnswer: string;
+  steps: GuideStep[];
+  practicalTips: string[];
+  commonMistakes?: string[];
+  sources: string[];
+  quiz: GuideQuizQuestion[];
+  relatedGuideIds?: string[];
+  relatedPrayerIds?: string[];
+}
+
+export interface GuideCategoryInfo {
+  id: GuideCategory;
+  title: string;
+  titleHebrew: string;
+  icon: string;
+  color: string;
+  description: string;
+}
+
+export interface GuideProgress {
+  guideId: string;
+  read: boolean;
+  readAt?: string;
+  bookmarked: boolean;
+  quizScore?: number;
+  quizTotal?: number;
+  quizCompletedAt?: string;
+}
+

@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { BottomNav } from '@/components/ui/BottomNav';
-import { getTefillahPrayers, getBrachotPrayers, getAllPrayers } from '@/lib/content/prayers';
+import { getTefillahPrayers, getAllPrayers } from '@/lib/content/prayers';
 import { getAllServices } from '@/lib/content/services';
 import { useAudio } from '@/hooks/useAudio';
 import { useKaraokeSync } from '@/hooks/useKaraokeSync';
@@ -16,9 +16,11 @@ import { ServiceRoadmap } from '@/components/siddur/ServiceRoadmap';
 import { AmudMode } from '@/components/siddur/AmudMode';
 import { KaraokePlayer } from '@/components/siddur/KaraokePlayer';
 import { AmudBadge } from '@/components/siddur/AmudBadge';
+import { AudioSourcePicker } from '@/components/siddur/AudioSourcePicker';
+import { getAudioForPrayer, type AudioSourceId, type PrayerAudioEntry } from '@/lib/content/audio-sources';
 import type { Prayer, DaveningService, ServiceItem } from '@/types';
 
-type Tab = 'services' | 'prayers' | 'brachot';
+type Tab = 'services' | 'prayers';
 type View = 'list' | 'prayer_reader' | 'service_roadmap' | 'amud_mode';
 
 export default function SiddurPage() {
@@ -29,12 +31,12 @@ export default function SiddurPage() {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [showCoaching, setShowCoaching] = useState(false);
   const [dismissedBanner, setDismissedBanner] = useState(false);
+  const [audioSource, setAudioSource] = useState<AudioSourceId>('siddur-audio');
 
   // Store
   const pronunciation = useUserStore((s) => s.profile.pronunciation);
   const audioSpeed = useUserStore((s) => s.profile.audioSpeed);
   const voiceGender = useUserStore((s) => s.profile.voiceGender);
-  const updateProfile = useUserStore((s) => s.updateProfile);
   const hasUsedCoaching = useUserStore((s) => s.hasUsedCoaching);
   const isPrayerFullyCoached = useUserStore((s) => s.isPrayerFullyCoached);
   const displaySettings = useUserStore((s) => s.displaySettings);
@@ -45,7 +47,7 @@ export default function SiddurPage() {
     () => ({ speed: audioSpeed, pronunciation, voiceGender }),
     [audioSpeed, pronunciation, voiceGender]
   );
-  const { play, stop, isPlaying, isLoading } = useAudio(audioOptions);
+  const { play, playSource, stop, isPlaying, isLoading } = useAudio(audioOptions);
 
   // Current section data
   const currentSection = selectedPrayer?.sections[currentSectionIndex];
@@ -123,6 +125,16 @@ export default function SiddurPage() {
     if (isPlaying) {
       stop();
     } else if (currentSection && selectedPrayer) {
+      // Check if we have a source recording for this prayer
+      if (audioSource !== 'tts') {
+        const entries = getAudioForPrayer(selectedPrayer.id);
+        const entry = entries.find((e) => e.sourceId === audioSource);
+        if (entry) {
+          playSource(entry.path, audioSpeed);
+          return;
+        }
+      }
+      // Fallback to per-section TTS
       const text =
         pronunciation === 'american'
           ? currentSection.transliteration
@@ -130,7 +142,7 @@ export default function SiddurPage() {
       const audioMode = pronunciation === 'american' ? 'transliteration' : 'hebrew';
       play(text, audioMode, audioSpeed, selectedPrayer.id, currentSection.id);
     }
-  }, [isPlaying, stop, play, currentSection, selectedPrayer, pronunciation, audioSpeed]);
+  }, [isPlaying, stop, play, playSource, currentSection, selectedPrayer, pronunciation, audioSpeed, audioSource]);
 
   // === VIEWS ===
 
@@ -186,8 +198,18 @@ export default function SiddurPage() {
                 {currentSectionIndex + 1}/{totalSections}
               </span>
             </div>
-            {/* Display Toggle Bar */}
-            <DisplayToggleBar />
+            {/* Audio Source & Display Toggles */}
+            <div className="flex items-center justify-between mt-2 gap-2">
+              <AudioSourcePicker
+                prayerId={selectedPrayer.id}
+                selectedSource={audioSource}
+                onSelectSource={(sourceId) => {
+                  stop();
+                  setAudioSource(sourceId);
+                }}
+              />
+              <DisplayToggleBar />
+            </div>
           </div>
         </div>
 
@@ -199,7 +221,9 @@ export default function SiddurPage() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-[#C6973F]/10 border border-[#C6973F]/20 rounded-2xl p-4 flex items-center gap-3"
             >
-              <span className="text-xl">&#x1F393;</span>
+              <div className="w-8 h-8 rounded-lg bg-[#C6973F]/20 flex items-center justify-center shrink-0">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#C6973F]" />
+              </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-[#2D3142]">First time?</p>
                 <p className="text-xs text-gray-500">
@@ -225,7 +249,9 @@ export default function SiddurPage() {
               className="bg-[#1B4965]/5 rounded-2xl p-5"
             >
               <div className="flex items-start gap-3">
-                <span className="text-2xl mt-0.5">&#x1F4A1;</span>
+                <div className="w-8 h-8 rounded-lg bg-[#1B4965]/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#1B4965]" />
+                </div>
                 <div>
                   <p className="text-sm font-medium text-[#1B4965]">
                     When: {selectedPrayer.whenSaid}
@@ -262,7 +288,6 @@ export default function SiddurPage() {
           {currentSection && (
             <KaraokePlayer
               section={currentSection}
-              prayerId={selectedPrayer.id}
               currentWordIndex={currentWordIndex}
               progress={progress}
               onTogglePlay={handleTogglePlay}
@@ -281,11 +306,10 @@ export default function SiddurPage() {
                 }
               }}
               disabled={currentSectionIndex === 0}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                currentSectionIndex === 0
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${currentSectionIndex === 0
                   ? 'text-gray-300'
                   : 'text-[#1B4965] hover:bg-[#1B4965]/5'
-              }`}
+                }`}
             >
               ← Previous
             </button>
@@ -309,9 +333,8 @@ export default function SiddurPage() {
                   <button
                     key={i}
                     onClick={() => { stop(); setCurrentSectionIndex(i); }}
-                    className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                      i === currentSectionIndex ? 'bg-[#1B4965]' : 'bg-gray-200 hover:bg-gray-300'
-                    }`}
+                    className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentSectionIndex ? 'bg-[#1B4965]' : 'bg-gray-200 hover:bg-gray-300'
+                      }`}
                   />
                 ))}
               </div>
@@ -325,11 +348,10 @@ export default function SiddurPage() {
                 }
               }}
               disabled={currentSectionIndex === totalSections - 1}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                currentSectionIndex === totalSections - 1
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${currentSectionIndex === totalSections - 1
                   ? 'text-gray-300'
                   : 'text-[#1B4965] hover:bg-[#1B4965]/5'
-              }`}
+                }`}
             >
               Next →
             </button>
@@ -344,7 +366,6 @@ export default function SiddurPage() {
           onClick={() => { stop(); setShowCoaching(true); }}
           className="fixed bottom-24 right-6 bg-[#C6973F] text-white px-5 py-3 rounded-full shadow-lg hover:bg-[#b8892f] active:scale-95 transition-all flex items-center gap-2 z-20"
         >
-          <span className="text-base">&#x1F393;</span>
           <span className="text-sm font-medium">Coach</span>
         </motion.button>
 
@@ -367,63 +388,91 @@ export default function SiddurPage() {
 }
 
 // ==========================
-// Prayer Card
+// Prayer Filter Groups
 // ==========================
 
-function PrayerCard({ prayer, onSelect }: { prayer: Prayer; onSelect: (p: Prayer) => void }) {
+type PrayerFilter = 'all' | 'morning' | 'pesukei_dzimra' | 'shema' | 'amidah' | 'closing' | 'hallel';
+
+const PRAYER_FILTERS: { id: PrayerFilter; label: string; color: string }[] = [
+  { id: 'all', label: 'All', color: '#1B4965' },
+  { id: 'morning', label: 'Morning', color: '#C6973F' },
+  { id: 'pesukei_dzimra', label: 'Pesukei D\'Zimra', color: '#5FA8D3' },
+  { id: 'shema', label: 'Shema', color: '#7C3AED' },
+  { id: 'amidah', label: 'Amidah', color: '#1B4965' },
+  { id: 'closing', label: 'Closing', color: '#4A7C59' },
+  { id: 'hallel', label: 'Hallel', color: '#C6973F' },
+];
+
+const PRAYER_GROUP_MAP: Record<string, PrayerFilter> = {
+  'modeh-ani': 'morning',
+  'netilat-yadayim': 'morning',
+  'asher-yatzar': 'morning',
+  'elokai-neshama': 'morning',
+  'birchos-hatorah': 'morning',
+  'birchos-hashachar': 'morning',
+  'hodu': 'pesukei_dzimra',
+  'baruch-sheamar': 'pesukei_dzimra',
+  'mizmor-ltodah': 'pesukei_dzimra',
+  'az-yashir': 'pesukei_dzimra',
+  'ashrei': 'pesukei_dzimra',
+  'yishtabach': 'pesukei_dzimra',
+  'yotzer-or': 'shema',
+  'ahavah-rabbah': 'shema',
+  'shema': 'shema',
+  'emet-vyatziv': 'shema',
+  'shemoneh-esrei': 'amidah',
+  'tachanun': 'closing',
+  'uva-ltzion': 'closing',
+  'ein-kelokeinu': 'closing',
+  'aleinu': 'closing',
+  'hallel': 'hallel',
+};
+
+// ==========================
+// Compact Prayer Box Card
+// ==========================
+
+function PrayerBoxCard({ prayer, onSelect }: { prayer: Prayer; onSelect: (p: Prayer) => void }) {
   const isPrayerCoached = useUserStore((s) =>
     s.isPrayerFullyCoached(prayer.id, prayer.sections.map((sec) => sec.id))
   );
+  const group = PRAYER_GROUP_MAP[prayer.id] || 'closing';
+  const filterColor = PRAYER_FILTERS.find((f) => f.id === group)?.color || 'var(--primary)';
 
   return (
-    <button
+    <motion.button
+      whileHover={{ y: -2, scale: 1.01 }}
+      whileTap={{ scale: 0.98 }}
       onClick={() => onSelect(prayer)}
-      className="w-full rounded-2xl border bg-white border-gray-100 hover:shadow-md hover:border-[#5FA8D3]/30 cursor-pointer p-4 text-left transition-all"
+      className="w-full rounded-[1rem] border bg-white border-gray-100/80 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.08)] cursor-pointer p-4 text-left transition-all relative overflow-hidden group"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-            isPrayerCoached
-              ? 'bg-[#4A7C59]/10 text-[#4A7C59]'
-              : 'bg-[#1B4965]/10 text-[#1B4965]'
-          }`}>
-            {isPrayerCoached ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            ) : (
-              prayer.sortOrder
-            )}
-          </div>
-          <div>
-            <h3 className="font-semibold text-[#2D3142] text-sm">{prayer.nameEnglish}</h3>
-            <p dir="rtl" className="font-[var(--font-hebrew-serif)] text-base text-gray-500">
-              {prayer.nameHebrew}
-            </p>
-          </div>
-        </div>
-        <svg className="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
-      {prayer.sections.length > 4 && (
-        <div className="mt-2 flex items-center gap-2 ml-11">
-          <span className="text-xs bg-[#1B4965]/5 text-[#1B4965] px-2 py-0.5 rounded-full font-medium">
-            {prayer.sections.length} sections
-          </span>
-          {prayer.estimatedReadSeconds >= 60 && (
-            <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-              ~{Math.ceil(prayer.estimatedReadSeconds / 60)} min
-            </span>
-          )}
+      {/* Top color accent - smoother transition */}
+      <div className="absolute top-0 left-0 right-0 h-[3px] opacity-80 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: filterColor }} />
+
+      {/* Coached indicator */}
+      {isPrayerCoached && (
+        <div className="absolute top-2.5 right-2.5 bg-green-50 rounded-full p-1">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="3">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
       )}
-    </button>
+
+      <h3 className="font-semibold text-[var(--foreground)] text-[14px] leading-tight pr-5 group-hover:text-[var(--primary)] transition-colors">{prayer.nameEnglish}</h3>
+      <p dir="rtl" className="font-[var(--font-hebrew-serif)] text-[15px] text-gray-400 mt-1.5 font-medium">
+        {prayer.nameHebrew}
+      </p>
+      {prayer.sections.length > 4 && (
+        <span className="text-[10px] text-gray-400/80 mt-2 block font-medium uppercase tracking-wider">
+          {prayer.sections.length} sections
+        </span>
+      )}
+    </motion.button>
   );
 }
 
 // ==========================
-// Main Siddur List (3-tab)
+// Main Siddur List (2-tab)
 // ==========================
 
 function SiddurList({
@@ -435,78 +484,105 @@ function SiddurList({
 }) {
   const [activeTab, setActiveTab] = useState<Tab>('services');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<PrayerFilter>('all');
 
   const services = getAllServices();
   const tefillahPrayers = getTefillahPrayers();
-  const brachotPrayers = getBrachotPrayers();
 
-  // Filter prayers by search
+  // Filter prayers by search + group filter
   const filteredPrayers = useMemo(() => {
-    if (!searchQuery.trim()) return tefillahPrayers;
-    const q = searchQuery.toLowerCase();
-    return tefillahPrayers.filter(
-      (p) =>
-        p.nameEnglish.toLowerCase().includes(q) ||
-        p.nameHebrew.includes(q) ||
-        p.whenSaid.toLowerCase().includes(q)
-    );
-  }, [tefillahPrayers, searchQuery]);
+    let result = tefillahPrayers;
+
+    // Apply group filter
+    if (activeFilter !== 'all') {
+      result = result.filter((p) => PRAYER_GROUP_MAP[p.id] === activeFilter);
+    }
+
+    // Apply search
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.nameEnglish.toLowerCase().includes(q) ||
+          p.nameHebrew.includes(q) ||
+          p.whenSaid.toLowerCase().includes(q)
+      );
+    }
+
+    return result;
+  }, [tefillahPrayers, searchQuery, activeFilter]);
 
   return (
-    <div className="min-h-screen bg-[#FEFDFB]">
+    <div className="min-h-screen bg-[var(--background)]">
       {/* Header */}
-      <div className="bg-[#1B4965] text-white px-6 py-8 rounded-b-3xl">
-        <div className="max-w-md mx-auto">
-          <Link href="/" className="text-[#5FA8D3] text-sm hover:text-white">
-            ← Home
+      <div className="bg-gradient-to-br from-[var(--primary)] to-[#154665] text-white px-6 pt-10 pb-12 rounded-b-[2.5rem] shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+        <div className="max-w-md mx-auto relative z-10">
+          <Link href="/" className="inline-flex items-center text-[var(--primary-light)] text-sm font-medium hover:text-white transition-colors">
+            <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            Home
           </Link>
-          <h1 className="text-2xl font-bold mt-2">Your Siddur</h1>
-          <p className="text-[#5FA8D3] text-sm mt-1">
-            Learn to daven, lead from the amud, and follow along in shul
+          <h1 className="text-3xl font-bold mt-4 tracking-tight drop-shadow-sm">Learn to Daven</h1>
+          <p className="text-[var(--primary-light)] text-sm mt-1.5 font-medium">
+            Follow along with services and individual prayers
           </p>
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-6 py-4 pb-28">
-        {/* 3-Tab Bar */}
-        <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6">
+      <div className="max-w-md mx-auto px-6 py-6 pb-32">
+        {/* 2-Tab Bar - Enhanced with animated active state */}
+        <div className="flex gap-1 bg-white/60 backdrop-blur-md rounded-[1.25rem] p-1.5 mb-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.03)] border border-gray-100/50 sticky top-4 z-20">
           {[
             { id: 'services' as Tab, label: 'Services' },
             { id: 'prayers' as Tab, label: 'All Prayers' },
-            { id: 'brachot' as Tab, label: 'Brachos' },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-                activeTab === tab.id
-                  ? 'bg-white text-[#1B4965] shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className="relative flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors z-10 outline-none"
             >
-              {tab.label}
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="activeTabSiddur"
+                  className="absolute inset-0 bg-white shadow-sm rounded-xl border border-gray-100/50"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className={`relative z-20 ${activeTab === tab.id ? 'text-[var(--primary)]' : 'text-gray-500 hover:text-gray-700'}`}>
+                {tab.label}
+              </span>
             </button>
           ))}
         </div>
 
         {/* === SERVICES TAB === */}
         {activeTab === 'services' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Weekday Services */}
             <div>
-              <h2 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
-                Weekday
-              </h2>
-              <div className="space-y-3">
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-xs uppercase tracking-widest text-[#B5842B] font-bold">
+                  Weekday
+                </h2>
+                <div className="h-px bg-gray-200 flex-1"></div>
+              </div>
+              <div className="space-y-3.5">
                 {services
                   .filter((s) => s.type === 'weekday')
                   .map((service, i) => (
-                    <ServiceCard
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
                       key={service.id}
-                      service={service}
-                      onSelect={onSelectService}
-                      index={i}
-                    />
+                    >
+                      <ServiceCard
+                        service={service}
+                        onSelect={onSelectService}
+                        index={i}
+                      />
+                    </motion.div>
                   ))}
               </div>
             </div>
@@ -514,19 +590,28 @@ function SiddurList({
             {/* Shabbat Services */}
             {services.some((s) => s.type === 'shabbat') && (
               <div>
-                <h2 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
-                  Shabbat
-                </h2>
-                <div className="space-y-3">
+                <div className="flex items-center gap-3 mb-4 mt-2">
+                  <h2 className="text-xs uppercase tracking-widest text-[#B5842B] font-bold">
+                    Shabbat
+                  </h2>
+                  <div className="h-px bg-gray-200 flex-1"></div>
+                </div>
+                <div className="space-y-3.5">
                   {services
                     .filter((s) => s.type === 'shabbat')
                     .map((service, i) => (
-                      <ServiceCard
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
                         key={service.id}
-                        service={service}
-                        onSelect={onSelectService}
-                        index={i}
-                      />
+                      >
+                        <ServiceCard
+                          service={service}
+                          onSelect={onSelectService}
+                          index={i}
+                        />
+                      </motion.div>
                     ))}
                 </div>
               </div>
@@ -537,11 +622,15 @@ function SiddurList({
 
         {/* === ALL PRAYERS TAB === */}
         {activeTab === 'prayers' && (
-          <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-5"
+          >
             {/* Search */}
-            <div className="relative">
+            <div className="relative group">
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400 group-focus-within:text-[var(--primary)] transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -555,48 +644,58 @@ function SiddurList({
                 placeholder="Search prayers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#1B4965] focus:ring-2 focus:ring-[#1B4965]/20 outline-none bg-white"
+                className="w-full pl-10 pr-4 py-3.5 rounded-[1.25rem] border border-gray-200/80 text-sm shadow-[0_2px_10px_-4px_rgba(0,0,0,0.02)] focus:border-[var(--primary-light)] focus:ring-4 focus:ring-[var(--primary-glow)] outline-none bg-white transition-all placeholder:text-gray-400"
               />
             </div>
 
-            {/* All prayers flat list (no level gating!) */}
-            <div className="space-y-2">
+            {/* Filter chips */}
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 px-0.5 -mx-6 sm:mx-0 sm:px-0">
+              <div className="w-4 shrink-0 sm:hidden"></div>
+              {PRAYER_FILTERS.map((filter) => (
+                <button
+                  key={filter.id}
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={`px-3.5 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-200 border ${activeFilter === filter.id
+                      ? 'text-white border-transparent shadow-md'
+                      : 'bg-white text-gray-500 border-gray-200/80 hover:bg-gray-50 hover:border-gray-300'
+                    }`}
+                  style={activeFilter === filter.id ? { backgroundColor: filter.color, boxShadow: `0 4px 12px -3px ${filter.color}50` } : undefined}
+                >
+                  {filter.label}
+                </button>
+              ))}
+              <div className="w-4 shrink-0 sm:hidden"></div>
+            </div>
+
+            {/* 2-column compact grid */}
+            <div className="grid grid-cols-2 gap-3 pt-1">
               {filteredPrayers.map((prayer, i) => (
                 <motion.div
                   key={prayer.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.02 }}
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: i * 0.03, type: 'spring', stiffness: 200, damping: 20 }}
                 >
-                  <PrayerCard prayer={prayer} onSelect={onSelectPrayer} />
+                  <PrayerBoxCard prayer={prayer} onSelect={onSelectPrayer} />
                 </motion.div>
               ))}
-              {filteredPrayers.length === 0 && (
-                <p className="text-center text-sm text-gray-400 py-8">
-                  No prayers match &quot;{searchQuery}&quot;
-                </p>
-              )}
             </div>
-          </div>
-        )}
-
-        {/* === BRACHOS TAB === */}
-        {activeTab === 'brachot' && (
-          <div className="space-y-3">
-            <p className="text-xs text-gray-400 mb-4 px-1">
-              Blessings over food and drink — know which bracha to say and when
-            </p>
-            {brachotPrayers.map((prayer, i) => (
+            {filteredPrayers.length === 0 && (
               <motion.div
-                key={prayer.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-12 px-4"
               >
-                <PrayerCard prayer={prayer} onSelect={onSelectPrayer} />
+                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-gray-600">No prayers found</p>
+                <p className="text-xs text-gray-400 mt-1">Try adjusting your filters or search terms</p>
               </motion.div>
-            ))}
-          </div>
+            )}
+          </motion.div>
         )}
       </div>
 
