@@ -1,0 +1,576 @@
+import type { DaveningService } from '@/types';
+
+export const SHABBAT_SHACHARIT: DaveningService = {
+  id: 'shabbat-shacharit',
+  name: 'Shabbat Shacharit & Musaf',
+  nameHebrew: 'שַׁחֲרִית וּמוּסָף שַׁבָּת',
+  type: 'shabbat',
+  timeOfDay: 'shacharit',
+  description: 'The complete Shabbat morning service including Musaf and Torah reading',
+  estimatedMinutes: 90,
+  segments: [
+    // =========================================================================
+    // SEGMENT 1: Birkot HaShachar (Morning Blessings)
+    // =========================================================================
+    {
+      id: 'birkot-hashachar',
+      title: 'Birkot HaShachar',
+      titleHebrew: 'בִּרְכוֹת הַשַּׁחַר',
+      description: 'The morning blessings — thanking Hashem for the basics of life',
+      color: '#D4A373',
+      items: [
+        {
+          id: 'shabbat-birkot-modeh-ani',
+          prayerId: 'modeh-ani',
+          type: 'prayer',
+          label: 'Modeh Ani',
+          labelHebrew: 'מוֹדֶה אֲנִי',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Said immediately upon waking, before washing hands. Stay in bed or sit up.',
+            notes: 'The very first thing said each morning — thanking Hashem for restoring your soul. Said the same on Shabbat as on weekdays.',
+          },
+          estimatedSeconds: 15,
+        },
+        {
+          id: 'shabbat-birkot-netilat-yadayim',
+          prayerId: 'netilat-yadayim',
+          type: 'prayer',
+          label: 'Netilat Yadayim',
+          labelHebrew: 'נְטִילַת יָדַיִם',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Pour water alternately on each hand three times, then say the blessing.',
+            notes: 'Ritual hand-washing to start the day in purity. A cup and basin are used.',
+          },
+          estimatedSeconds: 30,
+        },
+        {
+          id: 'shabbat-birkot-birchos-hashachar',
+          prayerId: 'birchos-hashachar',
+          type: 'prayer',
+          label: 'Birchos HaShachar',
+          labelHebrew: 'בִּרְכוֹת הַשַּׁחַר',
+          amud: {
+            role: 'both',
+            instruction: 'A series of blessings thanking Hashem for daily gifts — sight, clothing, freedom, strength. The Shaliach Tzibbur may recite them aloud.',
+            congregationResponse: 'אָמֵן',
+            congregationResponseTransliteration: 'Amen',
+            waitForCongregation: true,
+            notes: 'In many communities the Shaliach Tzibbur says these aloud and the congregation responds Amen after each blessing. Some say them individually.',
+          },
+          estimatedSeconds: 120,
+        },
+        {
+          id: 'shabbat-birkot-birchos-hatorah',
+          prayerId: 'birchos-hatorah',
+          type: 'prayer',
+          label: 'Birchos HaTorah',
+          labelHebrew: 'בִּרְכוֹת הַתּוֹרָה',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Blessings over Torah study. Must be said before learning any Torah.',
+            notes: 'These blessings are required before studying Torah each day. Many follow them with short Torah passages including the Birkat Kohanim.',
+          },
+          estimatedSeconds: 45,
+        },
+      ],
+    },
+
+    // =========================================================================
+    // SEGMENT 2: Pesukei D'Zimra (Verses of Praise)
+    // =========================================================================
+    {
+      id: 'pesukei-dzimra',
+      title: "Pesukei D'Zimra",
+      titleHebrew: 'פְּסוּקֵי דְזִמְרָא',
+      description: 'Psalms and praises to prepare your heart for the main prayer — expanded for Shabbat',
+      color: '#5FA8D3',
+      items: [
+        {
+          id: 'shabbat-pdzimra-hodu',
+          prayerId: 'hodu',
+          type: 'prayer',
+          label: 'Hodu',
+          labelHebrew: 'הוֹדוּ',
+          amud: {
+            role: 'both',
+            instruction: 'The Shaliach Tzibbur leads and the congregation joins in responsive verses.',
+            notes: 'A collection of verses giving thanks to Hashem. Sets the tone for the Pesukei D\'Zimra section.',
+          },
+          estimatedSeconds: 120,
+        },
+        {
+          id: 'shabbat-pdzimra-baruch-sheamar',
+          prayerId: 'baruch-sheamar',
+          type: 'prayer',
+          label: "Baruch She'amar",
+          labelHebrew: 'בָּרוּךְ שֶׁאָמַר',
+          amud: {
+            role: 'both',
+            instruction: 'Stand for this opening blessing of Pesukei D\'Zimra.',
+            physicalActions: ['stand'],
+            notes: 'This blessing "opens" the Pesukei D\'Zimra section. Stand while reciting it. Hold the front two tzitzit during the blessing.',
+          },
+          estimatedSeconds: 60,
+        },
+        {
+          id: 'shabbat-pdzimra-mizmor-ltodah',
+          prayerId: 'mizmor-ltodah',
+          type: 'prayer',
+          label: "Mizmor L'Todah",
+          labelHebrew: 'מִזְמוֹר לְתוֹדָה',
+          amud: {
+            role: 'both',
+            instruction: 'Psalm 100 — a psalm of thanksgiving.',
+            notes: 'NOT said on Shabbat in some communities (since the Todah offering was not brought on Shabbat). Check your community\'s custom.',
+          },
+          estimatedSeconds: 30,
+        },
+        {
+          id: 'shabbat-pdzimra-ashrei',
+          prayerId: 'ashrei',
+          type: 'prayer',
+          label: 'Ashrei',
+          labelHebrew: 'אַשְׁרֵי',
+          amud: {
+            role: 'both',
+            instruction: 'Psalm 145 with introductory verses. Sit for this recitation.',
+            physicalActions: ['sit'],
+            notes: 'Said three times daily. The verses follow the Hebrew alphabet (aleph-bet). One of the most important daily prayers.',
+          },
+          estimatedSeconds: 90,
+        },
+        {
+          id: 'shabbat-pdzimra-additional-psalms',
+          type: 'prayer',
+          label: 'Additional Shabbat Psalms',
+          labelHebrew: 'מִזְמוֹרֵי שַׁבָּת',
+          amud: {
+            role: 'both',
+            instruction: 'Extra psalms added on Shabbat — Psalms 19, 34, 90, 91, 135, 136, and Nishmat Kol Chai.',
+            notes: 'The Shabbat Pesukei D\'Zimra is significantly expanded. Nishmat Kol Chai is a soaring prayer of gratitude recited only on Shabbat and Yom Tov, praising Hashem for the gift of life itself. These additional psalms reflect the special sanctity and restfulness of the day.',
+          },
+          estimatedSeconds: 600,
+        },
+        {
+          id: 'shabbat-pdzimra-yishtabach',
+          prayerId: 'yishtabach',
+          type: 'prayer',
+          label: 'Yishtabach',
+          labelHebrew: 'יִשְׁתַּבַּח',
+          amud: {
+            role: 'both',
+            instruction: 'Stand for this closing blessing of Pesukei D\'Zimra.',
+            physicalActions: ['stand'],
+            notes: 'This blessing "closes" the Pesukei D\'Zimra section. Stand while reciting it. Contains 15 expressions of praise.',
+          },
+          estimatedSeconds: 45,
+        },
+        {
+          id: 'shabbat-pdzimra-half-kaddish',
+          prayerId: 'kaddish-half',
+          type: 'kaddish',
+          label: 'Half Kaddish',
+          labelHebrew: 'חֲצִי קַדִּישׁ',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The Shaliach Tzibbur recites Half Kaddish. Congregation responds at the appropriate points.',
+            congregationResponse: 'אָמֵן. יְהֵא שְׁמֵהּ רַבָּא...',
+            congregationResponseTransliteration: 'Amen. Yehei shmei rabba...',
+            physicalActions: ['stand'],
+            waitForCongregation: true,
+            notes: 'Half Kaddish marks the transition between Pesukei D\'Zimra and the Shema section. Respond "Amen" and "Yehei shmei rabba mevarach..." with enthusiasm.',
+          },
+          estimatedSeconds: 45,
+        },
+      ],
+    },
+
+    // =========================================================================
+    // SEGMENT 3: Shema & Brachot
+    // =========================================================================
+    {
+      id: 'shema-brachot',
+      title: 'Shema & Brachot',
+      titleHebrew: 'שְׁמַע וּבִרְכוֹתֶיהָ',
+      description: 'The core declaration of faith and its surrounding blessings',
+      color: '#7C3AED',
+      items: [
+        {
+          id: 'shabbat-shema-barchu',
+          prayerId: 'barchu',
+          type: 'responsive',
+          label: 'Barchu',
+          labelHebrew: 'בָּרְכוּ',
+          amud: {
+            role: 'both',
+            instruction: 'The Shaliach Tzibbur calls the congregation to prayer. Everyone bows at "Barchu" and stands upright at Hashem\'s name.',
+            congregationResponse: 'בָּרוּךְ ה׳ הַמְבוֹרָךְ לְעוֹלָם וָעֶד',
+            congregationResponseTransliteration: "Baruch Hashem ham'vorach l'olam va'ed",
+            physicalActions: ['bow_and_stand'],
+            waitForCongregation: true,
+            notes: 'The official "call to prayer." Bow when saying "Barchu" and straighten up when saying Hashem\'s name. This marks the start of the Shema section.',
+          },
+          estimatedSeconds: 20,
+        },
+        {
+          id: 'shabbat-shema-yotzer-or',
+          prayerId: 'yotzer-or',
+          type: 'prayer',
+          label: 'Yotzer Or',
+          labelHebrew: 'יוֹצֵר אוֹר',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The first blessing before Shema — praising Hashem as Creator of light.',
+            notes: 'Shabbat version includes additional piyyutim (liturgical poems) such as "HaKol Yoducha" and "E-l Adon." These beautiful hymns praise Hashem for creating the heavenly luminaries and are unique to the Shabbat service.',
+          },
+          estimatedSeconds: 180,
+        },
+        {
+          id: 'shabbat-shema-ahavah-rabbah',
+          prayerId: 'ahavah-rabbah',
+          type: 'prayer',
+          label: 'Ahavah Rabbah',
+          labelHebrew: 'אַהֲבָה רַבָּה',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The second blessing before Shema — thanking Hashem for His love and the gift of Torah.',
+            notes: 'Expresses gratitude for Hashem\'s deep love, manifested through giving us the Torah. Leads directly into the Shema.',
+          },
+          estimatedSeconds: 90,
+        },
+        {
+          id: 'shabbat-shema-shema',
+          prayerId: 'shema',
+          type: 'prayer',
+          label: 'Shema',
+          labelHebrew: 'שְׁמַע',
+          amud: {
+            role: 'both',
+            instruction: 'Cover your eyes with your right hand for the first verse. Concentrate deeply on accepting Hashem\'s sovereignty.',
+            physicalActions: ['cover_eyes'],
+            notes: 'The central declaration of Jewish faith: "Hear O Israel, Hashem is our God, Hashem is One." Cover your eyes to focus completely. The three paragraphs discuss love of Hashem, reward and consequence, and the mitzvah of tzitzit.',
+          },
+          estimatedSeconds: 180,
+        },
+        {
+          id: 'shabbat-shema-emet-vyatziv',
+          prayerId: 'emet-vyatziv',
+          type: 'prayer',
+          label: "Emet V'Yatziv",
+          labelHebrew: 'אֶמֶת וְיַצִּיב',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The blessing after Shema. Leads directly into the Amidah — do not interrupt between the final words "Ga\'al Yisrael" and the start of the Amidah.',
+            notes: 'Affirms the truth of everything declared in the Shema. Ends with the blessing of redemption. Important: go straight from the end of this blessing into the Amidah without pause (semichat geulah l\'tefillah).',
+          },
+          estimatedSeconds: 90,
+        },
+      ],
+    },
+
+    // =========================================================================
+    // SEGMENT 4: Shabbat Amidah
+    // =========================================================================
+    {
+      id: 'shabbat-amidah',
+      title: 'Shabbat Amidah',
+      titleHebrew: 'עֲמִידַת שַׁבָּת',
+      description: 'The central Shabbat prayer — 7 blessings said standing, facing Jerusalem',
+      color: '#1B4965',
+      items: [
+        {
+          id: 'shabbat-amidah-silent-instruction',
+          type: 'instruction',
+          label: 'Silent Amidah',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Everyone prays the Amidah silently. Take three steps forward before beginning. Stand with feet together, facing Jerusalem.',
+            physicalActions: ['stand', 'three_steps_forward'],
+            notes: 'Shabbat Amidah has 7 blessings — 3 opening (Avot, Gevurot, Kedusha), 1 middle blessing for the holiness of Shabbat (Kedushat HaYom), and 3 closing (Avodah, Hoda\'ah, Shalom). Unlike the weekday Amidah with 19 blessings, we do not make personal requests on Shabbat.',
+          },
+          estimatedSeconds: 15,
+        },
+        {
+          id: 'shabbat-amidah-shemoneh-esrei',
+          prayerId: 'shemoneh-esrei',
+          type: 'prayer',
+          label: 'Shemoneh Esrei',
+          labelHebrew: 'שְׁמוֹנֶה עֶשְׂרֵה',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Recite all 7 blessings silently. Bow at the designated points. At the end, take three steps back, bow left, right, and center.',
+            physicalActions: ['stand'],
+            notes: 'The Shabbat Amidah replaces the 13 middle weekday blessings with a single blessing celebrating the sanctity of Shabbat. The middle blessing on Shacharit begins with "Yismach Moshe" — Moshe rejoiced in the gift of Shabbat. Bow at the beginning and end of the first blessing and at Modim.',
+          },
+          estimatedSeconds: 300,
+        },
+        {
+          id: 'shabbat-amidah-chazarat-hashatz',
+          type: 'instruction',
+          label: 'Chazarat HaShatz',
+          labelHebrew: 'חֲזָרַת הַשַּׁ״ץ',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The Shaliach Tzibbur repeats the Amidah aloud. The congregation listens and responds "Amen" after each blessing.',
+            waitForCongregation: true,
+            notes: 'The repetition ensures that anyone who could not pray on their own fulfills their obligation. Listen carefully and answer "Amen" to each blessing. The Kedusha is recited during the repetition.',
+          },
+          estimatedSeconds: 15,
+        },
+        {
+          id: 'shabbat-amidah-kedusha',
+          prayerId: 'kedusha-shacharit',
+          type: 'responsive',
+          label: 'Kedusha',
+          labelHebrew: 'קְדוּשָּׁה',
+          amud: {
+            role: 'both',
+            instruction: 'Stand with feet together. Rise on your toes three times at "Kadosh, Kadosh, Kadosh." Shabbat Kedusha includes additional verses — "Mimkomcha" and the Shabbat-specific texts.',
+            congregationResponse: 'קָדוֹשׁ קָדוֹשׁ קָדוֹשׁ ה׳ צְבָאוֹת מְלֹא כָל הָאָרֶץ כְּבוֹדוֹ',
+            congregationResponseTransliteration: "Kadosh Kadosh Kadosh Hashem Tzva'ot, m'lo chol ha'aretz k'vodo",
+            physicalActions: ['stand', 'rise_on_toes'],
+            waitForCongregation: true,
+            notes: 'One of the holiest moments in the service. We emulate the angels declaring Hashem\'s holiness. Rise on your toes at each "Kadosh." The Shabbat Kedusha text differs from the weekday version — it includes "Mimkomcha Malkeinu Sofia" and Shabbat-specific passages reflecting the elevated holiness of the day. Must be said with a minyan.',
+          },
+          estimatedSeconds: 120,
+        },
+      ],
+    },
+
+    // =========================================================================
+    // SEGMENT 5: Torah Reading
+    // =========================================================================
+    {
+      id: 'torah-reading',
+      title: 'Torah Reading',
+      titleHebrew: 'קְרִיאַת הַתּוֹרָה',
+      description: 'The weekly Torah portion is read from the scroll — the highlight of the Shabbat morning',
+      color: '#C6973F',
+      items: [
+        {
+          id: 'shabbat-torah-service-opening',
+          type: 'instruction',
+          label: 'Torah Service Opening',
+          labelHebrew: 'פְּתִיחַת הָאָרוֹן',
+          amud: {
+            role: 'both',
+            instruction: 'The Aron Kodesh is opened. Everyone stands. "Vayehi binsoa ha\'aron..."',
+            physicalActions: ['stand'],
+            notes: 'The Torah scroll is removed from the Aron HaKodesh (Holy Ark) with great ceremony. The congregation recites verses declaring the greatness of Hashem and His Torah. The Torah is carried through the congregation; many kiss it with their tallit or siddur as it passes.',
+          },
+          estimatedSeconds: 120,
+        },
+        {
+          id: 'shabbat-torah-reading',
+          type: 'torah_reading',
+          label: 'Torah Reading',
+          labelHebrew: 'קְרִיאַת הַתּוֹרָה',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The weekly Torah portion is read. 7 people are called up for aliyot on Shabbat, plus maftir.',
+            notes: 'The Ba\'al Koreh (Torah reader) reads the weekly parashah from the scroll. Seven congregants are honored with aliyot (being called up to recite blessings before and after each section). The maftir reads a short section at the end. Each person called up says "Barchu et Hashem ham\'vorach" and the congregation responds. This is the longest section of the service.',
+          },
+          estimatedSeconds: 1200,
+        },
+        {
+          id: 'shabbat-haftarah',
+          type: 'torah_reading',
+          label: 'Haftarah',
+          labelHebrew: 'הַפְטָרָה',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The maftir reads a passage from the Prophets related to the weekly portion.',
+            notes: 'The Haftarah is a reading from the Nevi\'im (Prophets) that thematically connects to the weekly Torah portion. The maftir recites special blessings before and after the Haftarah reading. The Haftarah blessings on Shabbat include references to the sanctity of Shabbat.',
+          },
+          estimatedSeconds: 300,
+        },
+        {
+          id: 'shabbat-torah-service-closing',
+          type: 'instruction',
+          label: 'Torah Service Closing',
+          labelHebrew: 'הַכְנָסַת הַתּוֹרָה',
+          amud: {
+            role: 'both',
+            instruction: 'The Torah is returned to the Aron. Everyone stands. "Yehallelu es Shem Hashem..."',
+            physicalActions: ['stand'],
+            notes: 'The Torah scroll is lifted (Hagbahah) for the congregation to see the writing, then dressed (Gelilah). It is carried back to the Aron HaKodesh with singing. The congregation recites "Yehallelu es Shem Hashem ki nisgav shmo l\'vado..." and the Aron is closed.',
+          },
+          estimatedSeconds: 120,
+        },
+      ],
+    },
+
+    // =========================================================================
+    // SEGMENT 6: Musaf
+    // =========================================================================
+    {
+      id: 'musaf',
+      title: 'Musaf',
+      titleHebrew: 'מוּסָף',
+      description: 'The additional Shabbat prayer corresponding to the additional Temple offering',
+      color: '#1B4965',
+      items: [
+        {
+          id: 'shabbat-musaf-half-kaddish',
+          prayerId: 'kaddish-half',
+          type: 'kaddish',
+          label: 'Half Kaddish',
+          labelHebrew: 'חֲצִי קַדִּישׁ',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The Shaliach Tzibbur recites Half Kaddish to introduce the Musaf Amidah.',
+            congregationResponse: 'אָמֵן. יְהֵא שְׁמֵהּ רַבָּא...',
+            congregationResponseTransliteration: 'Amen. Yehei shmei rabba...',
+            physicalActions: ['stand'],
+            waitForCongregation: true,
+            notes: 'Half Kaddish marks the transition from the Torah service into the Musaf prayer. Respond with "Amen" and "Yehei shmei rabba mevarach..." with concentration.',
+          },
+          estimatedSeconds: 45,
+        },
+        {
+          id: 'shabbat-musaf-silent-instruction',
+          type: 'instruction',
+          label: 'Silent Musaf Amidah',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Take three steps forward. Stand with feet together, facing Jerusalem, for the silent Musaf Amidah.',
+            physicalActions: ['stand', 'three_steps_forward'],
+            notes: 'The Musaf Amidah has 7 blessings, including the Shabbat Musaf offering. The middle blessing describes the additional korban (sacrifice) that was offered on Shabbat in the Beit HaMikdash, and expresses our longing for the restoration of the Temple service.',
+          },
+          estimatedSeconds: 15,
+        },
+        {
+          id: 'shabbat-musaf-amidah',
+          type: 'prayer',
+          label: 'Musaf Amidah',
+          labelHebrew: 'עֲמִידַת מוּסָף',
+          amud: {
+            role: 'silent_individual',
+            instruction: 'Recite the 7 blessings of the Musaf Amidah silently. Bow at the designated points. At the end, take three steps back.',
+            physicalActions: ['stand'],
+            notes: 'The Musaf Amidah follows the same 7-blessing structure as the Shacharit Amidah (3 opening, 1 middle for Shabbat, 3 closing), but the middle blessing focuses specifically on the Musaf offering. The text includes "Tikanta Shabbat" — "You established Shabbat."',
+          },
+          estimatedSeconds: 240,
+        },
+        {
+          id: 'shabbat-musaf-chazarat-hashatz',
+          type: 'instruction',
+          label: 'Musaf Chazarat HaShatz',
+          labelHebrew: 'חֲזָרַת הַשַּׁ״ץ דְּמוּסָף',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The Shaliach Tzibbur repeats the Musaf Amidah aloud. The congregation listens and responds "Amen" after each blessing.',
+            waitForCongregation: true,
+            notes: 'The repetition of the Musaf Amidah. Listen carefully and answer "Amen" to each blessing. The Kedusha is recited during the repetition with special Musaf text.',
+          },
+          estimatedSeconds: 15,
+        },
+        {
+          id: 'shabbat-musaf-kedusha',
+          type: 'responsive',
+          label: 'Musaf Kedusha',
+          labelHebrew: 'קְדוּשַּׁת מוּסָף',
+          amud: {
+            role: 'both',
+            instruction: 'Stand with feet together. Rise on your toes at "Kadosh, Kadosh, Kadosh."',
+            congregationResponse: 'קָדוֹשׁ קָדוֹשׁ קָדוֹשׁ ה׳ צְבָאוֹת מְלֹא כָל הָאָרֶץ כְּבוֹדוֹ',
+            congregationResponseTransliteration: "Kadosh Kadosh Kadosh Hashem Tzva'ot, m'lo chol ha'aretz k'vodo",
+            physicalActions: ['stand', 'rise_on_toes'],
+            waitForCongregation: true,
+            notes: 'The Musaf Kedusha includes "Keter" (in Sefard and Edot HaMizrach traditions) or "Na\'aritzicha" (in the Ashkenaz tradition). The Keter version begins "Keter yitnu lecha" — "A crown they give You" — a soaring declaration of Hashem\'s kingship. This is one of the most elevated moments of the entire Shabbat service.',
+          },
+          estimatedSeconds: 120,
+        },
+      ],
+    },
+
+    // =========================================================================
+    // SEGMENT 7: Closing
+    // =========================================================================
+    {
+      id: 'closing',
+      title: 'Closing',
+      titleHebrew: 'סִיּוּם הַתְּפִלָּה',
+      description: 'Closing prayers and hymns of the Shabbat morning service',
+      color: '#4A7C59',
+      items: [
+        {
+          id: 'shabbat-closing-ein-kelokeinu',
+          prayerId: 'ein-kelokeinu',
+          type: 'prayer',
+          label: 'Ein Kelokeinu',
+          labelHebrew: 'אֵין כֵּאלֹקֵינוּ',
+          amud: {
+            role: 'both',
+            instruction: 'A beloved hymn praising Hashem. Sit for this recitation.',
+            physicalActions: ['sit'],
+            notes: 'Ein Kelokeinu is a joyful hymn sung by the entire congregation. In the Ashkenaz tradition it is said primarily on Shabbat and Yom Tov (Sefard communities say it daily). The verses follow a pattern: "Ein," "Mi," "Nodeh," "Baruch," "Atah Hu" — the first letters spell out "Amen."',
+          },
+          estimatedSeconds: 60,
+        },
+        {
+          id: 'shabbat-closing-full-kaddish',
+          prayerId: 'kaddish-full',
+          type: 'kaddish',
+          label: 'Full Kaddish',
+          labelHebrew: 'קַדִּישׁ שָׁלֵם',
+          amud: {
+            role: 'shaliach_tzibbur',
+            instruction: 'The Shaliach Tzibbur recites the Full Kaddish (Kaddish Titkabel), which includes the prayer that our prayers be accepted.',
+            congregationResponse: 'אָמֵן',
+            congregationResponseTransliteration: 'Amen',
+            physicalActions: ['stand'],
+            waitForCongregation: true,
+            notes: 'The Full Kaddish adds the paragraph "Titkabel" — a prayer that all of our prayers be received favorably. This signifies the formal conclusion of the Musaf service.',
+          },
+          estimatedSeconds: 60,
+        },
+        {
+          id: 'shabbat-closing-aleinu',
+          prayerId: 'aleinu',
+          type: 'prayer',
+          label: 'Aleinu',
+          labelHebrew: 'עָלֵינוּ',
+          amud: {
+            role: 'both',
+            instruction: 'Stand and bow at "Va\'anachnu kor\'im u\'mishtachavim" — we bow and prostrate before the King of Kings.',
+            physicalActions: ['stand', 'bow'],
+            notes: 'Aleinu declares Hashem\'s sovereignty over all creation. Bow deeply (some bend their knees and bow) at the designated phrase. Originally composed by Joshua upon entering the Land of Israel.',
+          },
+          estimatedSeconds: 60,
+        },
+        {
+          id: 'shabbat-closing-mourners-kaddish',
+          prayerId: 'kaddish-mourners',
+          type: 'kaddish',
+          label: "Mourner's Kaddish",
+          labelHebrew: 'קַדִּישׁ יָתוֹם',
+          amud: {
+            role: 'both',
+            instruction: 'Mourners recite the Kaddish. The congregation responds "Amen" and "Yehei shmei rabba..." at the appropriate points.',
+            congregationResponse: 'אָמֵן. יְהֵא שְׁמֵהּ רַבָּא...',
+            congregationResponseTransliteration: 'Amen. Yehei shmei rabba...',
+            physicalActions: ['stand'],
+            waitForCongregation: true,
+            notes: 'Recited by mourners (those within the first year after losing a parent, or during the annual yahrtzeit). Even if you are not a mourner, respond "Amen" — it is a great merit for the departed souls.',
+          },
+          estimatedSeconds: 45,
+        },
+        {
+          id: 'shabbat-closing-adon-olam',
+          type: 'prayer',
+          label: 'Adon Olam',
+          labelHebrew: 'אֲדוֹן עוֹלָם',
+          amud: {
+            role: 'both',
+            instruction: 'Closing hymn declaring Hashem\'s sovereignty. The congregation sings together.',
+            notes: 'Adon Olam is a beloved closing hymn attributed to Shlomo ibn Gabirol. It declares that Hashem is the eternal Master of the universe — He was, is, and will always be. Many communities have joyful melodies for this hymn, and it is a beautiful way to conclude the Shabbat morning service.',
+          },
+          estimatedSeconds: 60,
+        },
+      ],
+    },
+  ],
+};
