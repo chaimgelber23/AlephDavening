@@ -178,7 +178,7 @@ export function useAudio(options?: UseAudioOptions) {
 
   /**
    * Play a section of a prayer.
-   * Priority: static per-section file → full-prayer siddur audio → TTS fallback
+   * Priority: static per-section file → full-prayer siddur audio
    */
   const play = useCallback(async (
     text: string,
@@ -215,21 +215,8 @@ export function useAudio(options?: UseAudioOptions) {
         }
       }
 
-      // 3. Fall back to TTS API
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, mode, speed, voiceGender: options?.voiceGender || 'male' }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({ error: 'Audio unavailable' }));
-        throw new Error(data.error || 'Failed to generate audio');
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      await playAudioUrl(url, speed, true);
+      // No audio available for this prayer/section
+      setError('No audio available');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Audio unavailable');
     } finally {

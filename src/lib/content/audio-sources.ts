@@ -4,12 +4,11 @@
  * Each prayer can have multiple audio sources:
  * - Siddur Audio: Full text readings (split from compound recordings)
  * - Hadar (Weiss/Richman/Diamond): Nusach demonstrations by different artists
- * - TTS: Generated fallback (handled by useAudio hook, not listed here)
  *
  * Sources are listed per prayer so users can choose their preferred voice/style.
  */
 
-export type AudioSourceId = 'siddur-audio' | 'chabad' | 'hadar-weiss' | 'hadar-richman' | 'hadar-diamond' | 'hadar-rosenbaum' | 'tts';
+export type AudioSourceId = 'siddur-audio' | 'chabad' | 'hadar-weiss' | 'hadar-richman' | 'hadar-diamond' | 'hadar-rosenbaum';
 
 export interface AudioSource {
   id: AudioSourceId;
@@ -54,12 +53,6 @@ export const AUDIO_SOURCES: Record<AudioSourceId, AudioSource> = {
     label: 'Hadar - Rosenbaum',
     shortLabel: 'Rosenbaum',
     description: 'Nusach demonstration — Hadar Institute',
-  },
-  'tts': {
-    id: 'tts',
-    label: 'Text-to-Speech',
-    shortLabel: 'TTS',
-    description: 'AI-generated reading',
   },
 };
 
@@ -198,8 +191,5 @@ export function getAudioBySource(prayerId: string, sourceId: AudioSourceId): Pra
  */
 export function getAvailableSources(prayerId: string): AudioSourceId[] {
   const entries = PRAYER_AUDIO_MAP[prayerId] ?? [];
-  const sources = entries.map((e) => e.sourceId);
-  // TTS is always available as fallback
-  if (!sources.includes('tts')) sources.push('tts');
-  return sources;
+  return entries.map((e) => e.sourceId);
 }

@@ -131,15 +131,13 @@ export default function SiddurPage() {
       stop();
     } else if (currentSection && selectedPrayer) {
       // Check if we have a source recording for this prayer
-      if (audioSource !== 'tts') {
-        const entries = getAudioForPrayer(selectedPrayer.id);
-        const entry = entries.find((e) => e.sourceId === audioSource);
-        if (entry) {
-          playSource(entry.path, audioSpeed);
-          return;
-        }
+      const entries = getAudioForPrayer(selectedPrayer.id);
+      const entry = entries.find((e) => e.sourceId === audioSource);
+      if (entry) {
+        playSource(entry.path, audioSpeed);
+        return;
       }
-      // Fallback to per-section TTS
+      // Fallback to per-section static audio
       const text =
         pronunciation === 'american'
           ? currentSection.transliteration

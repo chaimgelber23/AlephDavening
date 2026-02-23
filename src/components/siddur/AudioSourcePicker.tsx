@@ -14,7 +14,7 @@ export function AudioSourcePicker({ prayerId, selectedSource, onSelectSource }: 
   const availableSources = getAvailableSources(prayerId);
   const entries = getAudioForPrayer(prayerId);
 
-  // If only TTS is available, don't show the picker
+  // If no sources or only one source available, don't show the picker
   if (availableSources.length <= 1) return null;
 
   const currentSource = AUDIO_SOURCES[selectedSource];
