@@ -8,7 +8,7 @@
  * Sources are listed per prayer so users can choose their preferred voice/style.
  */
 
-export type AudioSourceId = 'siddur-audio' | 'chabad' | 'hadar-weiss' | 'hadar-richman' | 'hadar-diamond' | 'hadar-rosenbaum';
+export type AudioSourceId = 'siddur-audio' | 'chabad' | 'hadar-weiss' | 'hadar-richman' | 'hadar-diamond' | 'hadar-rosenbaum' | 'google-tts';
 
 export interface AudioSource {
   id: AudioSourceId;
@@ -53,6 +53,12 @@ export const AUDIO_SOURCES: Record<AudioSourceId, AudioSource> = {
     label: 'Hadar - Rosenbaum',
     shortLabel: 'Rosenbaum',
     description: 'Nusach demonstration — Hadar Institute',
+  },
+  'google-tts': {
+    id: 'google-tts',
+    label: 'Google Hebrew Voice',
+    shortLabel: 'Google',
+    description: 'Hebrew Wavenet voice — high quality',
   },
 };
 
@@ -191,5 +197,8 @@ export function getAudioBySource(prayerId: string, sourceId: AudioSourceId): Pra
  */
 export function getAvailableSources(prayerId: string): AudioSourceId[] {
   const entries = PRAYER_AUDIO_MAP[prayerId] ?? [];
-  return entries.map((e) => e.sourceId);
+  const sources = entries.map((e) => e.sourceId);
+  // Google TTS is always available as fallback
+  if (!sources.includes('google-tts')) sources.push('google-tts');
+  return sources;
 }
