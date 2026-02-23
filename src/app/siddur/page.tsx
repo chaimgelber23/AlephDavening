@@ -17,11 +17,12 @@ import { AmudMode } from '@/components/siddur/AmudMode';
 import { KaraokePlayer } from '@/components/siddur/KaraokePlayer';
 import { AmudBadge } from '@/components/siddur/AmudBadge';
 import { AudioSourcePicker } from '@/components/siddur/AudioSourcePicker';
+import { TefillahPrepSheet } from '@/components/siddur/TefillahPrepSheet';
 import { getAudioForPrayer, type AudioSourceId, type PrayerAudioEntry } from '@/lib/content/audio-sources';
 import type { Prayer, DaveningService, ServiceItem } from '@/types';
 
 type Tab = 'services' | 'prayers';
-type View = 'list' | 'prayer_reader' | 'service_roadmap' | 'amud_mode';
+type View = 'list' | 'prayer_reader' | 'service_roadmap' | 'amud_mode' | 'prep_sheet';
 
 export default function SiddurPage() {
   // Navigation state
@@ -101,6 +102,10 @@ export default function SiddurPage() {
     setView('amud_mode');
   }, []);
 
+  const handleOpenPrepSheet = useCallback(() => {
+    setView('prep_sheet');
+  }, []);
+
   const handleBack = useCallback(() => {
     stop();
     if (view === 'prayer_reader') {
@@ -114,7 +119,7 @@ export default function SiddurPage() {
     } else if (view === 'service_roadmap') {
       setView('list');
       setSelectedService(null);
-    } else if (view === 'amud_mode') {
+    } else if (view === 'amud_mode' || view === 'prep_sheet') {
       setView('service_roadmap');
     } else {
       setView('list');
@@ -158,6 +163,17 @@ export default function SiddurPage() {
         service={selectedService}
         onSelectItem={handleServiceItemSelect}
         onEnterAmudMode={handleEnterAmudMode}
+        onOpenPrepSheet={handleOpenPrepSheet}
+        onBack={handleBack}
+      />
+    );
+  }
+
+  // Prep Sheet
+  if (view === 'prep_sheet' && selectedService) {
+    return (
+      <TefillahPrepSheet
+        service={selectedService}
         onBack={handleBack}
       />
     );

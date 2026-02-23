@@ -52,3 +52,15 @@ html {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Print styles for Prep Sheet */
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  body { background: white !important; }
+  .prep-segment { break-inside: avoid; }
+  .prep-response, .print-color {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
